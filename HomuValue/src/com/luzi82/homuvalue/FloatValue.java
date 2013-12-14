@@ -186,6 +186,44 @@ public class FloatValue {
 		}
 	}
 
+	// min-max
+
+	public static Value<Float> minMax(Value<? extends Number> min, Value<? extends Number> t,
+			Value<? extends Number> max) {
+		return new MinMax(min, t, max).optimize();
+	}
+
+	private static class MinMax extends Function<Float> {
+
+		Value<? extends Number> min;
+		Value<? extends Number> max;
+		Value<? extends Number> t;
+
+		public MinMax(Value<? extends Number> min, Value<? extends Number> t, Value<? extends Number> max) {
+			this.min = min;
+			this.max = max;
+			this.t = t;
+			addChild(min);
+			addChild(max);
+			addChild(t);
+		}
+
+		@Override
+		public Float update() {
+			float minF = min.get().floatValue();
+			float maxF = max.get().floatValue();
+			float tF = t.get().floatValue();
+
+			if (maxF < minF)
+				return tF;
+			if (tF < minF)
+				return minF;
+			if (maxF < tF)
+				return maxF;
+			return tF;
+		}
+	}
+	
 	// linear
 
 	public static Value<Float> linear(Value<? extends Number> u0,

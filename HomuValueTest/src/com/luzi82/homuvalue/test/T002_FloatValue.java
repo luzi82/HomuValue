@@ -188,7 +188,29 @@ public class T002_FloatValue {
 		v1.set(-1f);
 		Assert.assertEquals((Float) 1f, ret.get());
 	}
-	
+
+	@Test
+	public void minMax() {
+		Value<Float> ret;
+
+		Variable<Float> v0 = Value.variable(0f);
+		Variable<Float> v1 = Value.variable(1f);
+		Variable<Float> v2 = Value.variable(2f);
+		ret = FloatValue.minMax(v0, v1, v2);
+		Assert.assertEquals((Float) 1f, ret.get());
+
+		v1.set(-1f);
+		Assert.assertEquals((Float) 0f, ret.get());
+
+		v1.set(3f);
+		Assert.assertEquals((Float) 2f, ret.get());
+
+		v0.set(2f);
+		v1.set(1f);
+		v2.set(0f);
+		Assert.assertEquals((Float) 1f, ret.get());
+	}
+
 	@Test
 	public void linear(){
 		Value<Float> ret;
