@@ -100,4 +100,37 @@ public class IntegerValue {
 			return super.optimize();
 		}
 	}
+
+	// div
+
+	@SuppressWarnings("unchecked")
+	public static Value<Integer> div(Value<Integer> a, Value<Integer> b) {
+		return new Div(a, b).optimize();
+	}
+
+	private static class Div extends Function<Integer> {
+
+		Value<Integer> a;
+		Value<Integer> b;
+
+		public Div(Value<Integer> a, Value<Integer> b) {
+			this.a = a;
+			this.b = b;
+			addChild(a);
+			addChild(b);
+		}
+
+		@Override
+		public Integer update() {
+			return a.get() / b.get();
+		}
+
+		@Override
+		public Value<Integer> optimize() {
+			if (a.isConstant && a.get() == 0) {
+				return Value.constant(0);
+			}
+			return super.optimize();
+		}
+	}
 }

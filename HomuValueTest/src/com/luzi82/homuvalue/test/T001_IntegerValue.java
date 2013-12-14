@@ -110,4 +110,49 @@ public class T001_IntegerValue {
 		Assert.assertTrue(ret.isConstant);
 	}
 
+	@Test
+	public void div() {
+		Value<Integer> ret;
+
+		Variable<Integer> v0 = Value.variable(3);
+		Variable<Integer> v1 = Value.variable(2);
+		ret = IntegerValue.div(v0, v1);
+		Assert.assertTrue(!ret.isConstant);
+		Assert.assertEquals((Integer) 1, ret.get());
+		
+		v0.set(10);
+		Assert.assertEquals((Integer) 5, ret.get());
+		
+		v1.set(3);
+		Assert.assertEquals((Integer) 3, ret.get());
+	}
+
+	@Test
+	public void divConst() {
+		Value<Integer> ret;
+
+		Value<Integer> v0 = Value.constant(3);
+		Value<Integer> v1 = Value.constant(2);
+		ret = IntegerValue.div(v0, v1);
+		Assert.assertTrue(ret.isConstant);
+		Assert.assertEquals((Integer) 1, ret.get());
+	}
+	
+	@Test
+	public void divZero() {
+		Value<Integer> ret;
+
+		Value<Integer> v0 = Value.constant(0);
+		Value<Integer> v1 = Value.variable(2);
+		ret = IntegerValue.div(v0, v1);
+		Assert.assertTrue(ret.isConstant);
+		Assert.assertEquals((Integer) 0, ret.get());
+
+		v0 = Value.variable(0);
+		v1 = Value.variable(2);
+		ret = IntegerValue.div(v0, v1);
+		Assert.assertTrue(!ret.isConstant);
+		Assert.assertEquals((Integer) 0, ret.get());
+	}
+	
 }
