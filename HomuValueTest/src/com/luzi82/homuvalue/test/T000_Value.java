@@ -20,12 +20,7 @@ public class T000_Value {
 
 		Assert.assertEquals((Integer) 100, intValue.get());
 
-		TestListener<Integer> intListener = new TestListener<Integer>();
-		intValue.addListener(intListener);
-
 		intValue.set(200);
-
-		Assert.assertSame(intValue, intListener.v);
 
 		Assert.assertEquals((Integer) 200, intValue.get());
 	}
@@ -47,4 +42,31 @@ public class T000_Value {
 		intVar.get();
 		Assert.assertFalse(intVar.dirty());
 	}
+
+	@Test
+	public void dirtyListener() {
+		Value.Variable<Integer> intValue = Value.variable(100);
+
+		TestListener<Integer> intListener = new TestListener<Integer>();
+		intValue.addListener(intListener);
+
+		intValue.get();
+
+		intValue.set(200);
+
+		Assert.assertSame(intValue, intListener.v);
+
+		intListener.v = null;
+
+		intValue.set(300);
+
+		Assert.assertSame(null, intListener.v);
+
+		intValue.get();
+
+		intValue.set(400);
+
+		Assert.assertSame(intValue, intListener.v);
+	}
+
 }
