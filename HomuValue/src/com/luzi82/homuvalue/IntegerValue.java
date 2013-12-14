@@ -103,7 +103,6 @@ public class IntegerValue {
 
 	// div
 
-	@SuppressWarnings("unchecked")
 	public static Value<Integer> div(Value<Integer> a, Value<Integer> b) {
 		return new Div(a, b).optimize();
 	}
