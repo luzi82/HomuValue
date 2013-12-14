@@ -1,18 +1,17 @@
 package com.luzi82.homuvalue;
 
-import com.luzi82.homuvalue.Value.Dynamic;
+import com.luzi82.homuvalue.Value.Function;
 
 public class IntegerValue {
 
-	private static class IntegerSum extends Dynamic<Integer> implements
-			com.luzi82.homuvalue.Value.Listener<Integer> {
+	private static class IntegerSum extends Function<Integer> {
 
 		Value<Integer>[] values;
 
 		public IntegerSum(Value<Integer>[] values) {
 			this.values = values;
 			for (Value<Integer> v : values) {
-				v.addListener(this);
+				addChild(v);
 			}
 		}
 
@@ -24,11 +23,6 @@ public class IntegerValue {
 			}
 			return ret;
 		}
-
-		@Override
-		public void onValueDirty(Value<Integer> v) {
-			markDirty();
-		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -37,7 +31,7 @@ public class IntegerValue {
 	}
 
 	public static Value<Integer> sum(Value<Integer>[] values) {
-		return new IntegerSum(values);
+		return new IntegerSum(values).optimize();
 	}
 
 }

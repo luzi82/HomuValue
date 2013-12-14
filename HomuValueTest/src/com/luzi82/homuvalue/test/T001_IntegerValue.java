@@ -20,6 +20,8 @@ public class T001_IntegerValue {
 		@SuppressWarnings("unchecked")
 		Value<Integer> i10 = IntegerValue.sum(new Value[] { i3, i3, i4 });
 		Assert.assertEquals((Integer) 10, i10.get());
+
+		Assert.assertTrue(i10.isConstant);
 	}
 
 	@Test
@@ -29,6 +31,8 @@ public class T001_IntegerValue {
 
 		Value<Integer> i7 = IntegerValue.sum(i3, i4);
 		Assert.assertEquals((Integer) 7, i7.get());
+
+		Assert.assertFalse(i7.isConstant);
 
 		i3.set(9);
 

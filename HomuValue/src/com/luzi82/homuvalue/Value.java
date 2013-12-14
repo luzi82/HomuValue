@@ -104,6 +104,33 @@ public abstract class Value<T> {
 		return ret;
 	}
 
+	@SuppressWarnings("rawtypes")
+	public abstract static class Function<T> extends Dynamic<T> implements
+			Listener {
+		public boolean isConst = true;
+
+		@SuppressWarnings("unchecked")
+		protected void addChild(Value v) {
+			v.addListener(this);
+			if (isConst && !v.isConstant) {
+				isConst = false;
+			}
+		}
+
+		@Override
+		public void onValueDirty(Value v) {
+			markDirty();
+		}
+
+		public Value<T> optimize() {
+			if (isConst) {
+				return Value.constant(get());
+			} else {
+				return this;
+			}
+		}
+	}
+
 	public static interface Listener<T> {
 
 		public void onValueDirty(Value<T> v);
