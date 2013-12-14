@@ -15,6 +15,8 @@ public abstract class Value<T> {
 		this.isConstant = isConstant;
 	}
 
+	public abstract boolean dirty();
+
 	public static class Constant<T> extends Value<T> {
 		private final T value;
 
@@ -31,6 +33,11 @@ public abstract class Value<T> {
 		@Override
 		public final void addListener(Listener<T> listener) {
 			// do nothing
+		}
+
+		@Override
+		public boolean dirty() {
+			return false;
 		}
 	}
 
@@ -81,6 +88,11 @@ public abstract class Value<T> {
 		@Override
 		public final void addListener(Listener<T> listener) {
 			list.add(new WeakReference<Listener<T>>(listener));
+		}
+
+		@Override
+		public boolean dirty() {
+			return dirty;
 		}
 	}
 
