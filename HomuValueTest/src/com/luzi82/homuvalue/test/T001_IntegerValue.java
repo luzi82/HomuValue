@@ -39,4 +39,24 @@ public class T001_IntegerValue {
 		Assert.assertEquals((Integer) 13, i7.get());
 	}
 
+	@Test
+	public void netgative() {
+		Value<Integer> c = Value.constant(3);
+		Value<Integer> nc = IntegerValue.negative(c);
+
+		Assert.assertEquals((Integer) (-3), nc.get());
+		Assert.assertTrue(nc.isConstant);
+
+		Variable<Integer> v = Value.variable(4);
+		Value<Integer> nv = IntegerValue.negative(v);
+
+		Assert.assertTrue(!nv.isConstant);
+
+		Assert.assertEquals((Integer) (-4), nv.get());
+
+		v.set(5);
+
+		Assert.assertEquals((Integer) (-5), nv.get());
+	}
+
 }

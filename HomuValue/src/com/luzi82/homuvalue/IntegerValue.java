@@ -4,11 +4,13 @@ import com.luzi82.homuvalue.Value.Function;
 
 public class IntegerValue {
 
-	private static class IntegerSum extends Function<Integer> {
+	// sum
+
+	private static class Sum extends Function<Integer> {
 
 		Value<Integer>[] values;
 
-		public IntegerSum(Value<Integer>[] values) {
+		public Sum(Value<Integer>[] values) {
 			this.values = values;
 			for (Value<Integer> v : values) {
 				addChild(v);
@@ -31,7 +33,28 @@ public class IntegerValue {
 	}
 
 	public static Value<Integer> sum(Value<Integer>[] values) {
-		return new IntegerSum(values).optimize();
+		return new Sum(values).optimize();
+	}
+
+	// negative
+
+	private static class Negative extends Function<Integer> {
+
+		final Value<Integer> v;
+
+		public Negative(Value<Integer> v) {
+			this.v = v;
+			addChild(v);
+		}
+
+		@Override
+		public Integer update() {
+			return -v.get();
+		}
+	}
+
+	public static Value<Integer> negative(Value<Integer> v) {
+		return new Negative(v).optimize();
 	}
 
 }
