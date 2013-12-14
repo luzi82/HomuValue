@@ -12,7 +12,6 @@ public class T000_Value {
 		Value<Integer> intValue = Value.constant(100);
 
 		Assert.assertEquals((Integer) 100, intValue.get());
-		Assert.assertFalse(intValue.dirty());
 	}
 
 	@Test
@@ -27,10 +26,25 @@ public class T000_Value {
 		intValue.set(200);
 
 		Assert.assertSame(intValue, intListener.v);
-		Assert.assertTrue(intValue.dirty());
 
 		Assert.assertEquals((Integer) 200, intValue.get());
-		Assert.assertFalse(intValue.dirty());
 	}
 
+	@Test
+	public void dirty() {
+		Value<Integer> intValue = Value.constant(100);
+		Assert.assertFalse(intValue.dirty());
+
+		Value.Variable<Integer> intVar = Value.variable(100);
+		Assert.assertTrue(intVar.dirty());
+
+		intVar.get();
+		Assert.assertFalse(intVar.dirty());
+
+		intVar.set(200);
+		Assert.assertTrue(intVar.dirty());
+
+		intVar.get();
+		Assert.assertFalse(intVar.dirty());
+	}
 }
