@@ -128,6 +128,40 @@ public class T001_IntegerValue {
 	}
 
 	@Test
+	public void min() {
+		Value<Integer> ret;
+
+		Variable<Integer> v0 = Value.variable(3);
+		Variable<Integer> v1 = Value.variable(2);
+		ret = IntegerValue.min(v0, v1);
+		Assert.assertTrue(!ret.isConstant);
+		Assert.assertEquals((Integer) 2, ret.get());
+
+		v0.set(1);
+		Assert.assertEquals((Integer) 1, ret.get());
+
+		v1.set(-1);
+		Assert.assertEquals((Integer) (-1), ret.get());
+	}
+
+	@Test
+	public void max() {
+		Value<Integer> ret;
+
+		Variable<Integer> v0 = Value.variable(3);
+		Variable<Integer> v1 = Value.variable(2);
+		ret = IntegerValue.max(v0, v1);
+		Assert.assertTrue(!ret.isConstant);
+		Assert.assertEquals((Integer) 3, ret.get());
+
+		v0.set(1);
+		Assert.assertEquals((Integer) 2, ret.get());
+
+		v1.set(-1);
+		Assert.assertEquals((Integer) 1, ret.get());
+	}
+
+	@Test
 	public void divConst() {
 		Value<Integer> ret;
 

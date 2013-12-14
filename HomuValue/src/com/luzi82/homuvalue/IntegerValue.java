@@ -134,6 +134,54 @@ public class IntegerValue {
 		}
 	}
 
+	// min
+
+	public static Value<Integer> min(Value<Integer> a, Value<Integer> b) {
+		return new Min(a, b).optimize();
+	}
+
+	private static class Min extends Function<Integer> {
+
+		Value<Integer> a;
+		Value<Integer> b;
+
+		public Min(Value<Integer> a, Value<Integer> b) {
+			this.a = a;
+			this.b = b;
+			addChild(a);
+			addChild(b);
+		}
+
+		@Override
+		public Integer update() {
+			return Math.min(a.get(), b.get());
+		}
+	}
+
+	// max
+
+	public static Value<Integer> max(Value<Integer> a, Value<Integer> b) {
+		return new Max(a, b).optimize();
+	}
+
+	private static class Max extends Function<Integer> {
+
+		Value<Integer> a;
+		Value<Integer> b;
+
+		public Max(Value<Integer> a, Value<Integer> b) {
+			this.a = a;
+			this.b = b;
+			addChild(a);
+			addChild(b);
+		}
+
+		@Override
+		public Integer update() {
+			return Math.max(a.get(), b.get());
+		}
+	}
+
 	// round
 
 	private static class Round extends Function<Integer> {
