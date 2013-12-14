@@ -1,16 +1,45 @@
 package com.luzi82.homuvalue;
 
-public class Value<T> {
+import com.luzi82.homuvalue.Value.Variable;
 
-	T constant;
+public abstract class Value<T> {
 
-	public T get() {
-		return constant;
+	public abstract T get();
+
+	public static class Constant<T> extends Value<T> {
+		private final T value;
+
+		Constant(T t) {
+			value = t;
+		}
+
+		@Override
+		public T get() {
+			return value;
+		}
 	}
 
-	public static <T> Value<T> constant(T i) {
-		Value<T> ret = new Value<T>();
-		ret.constant = i;
+	public static <T> Constant<T> constant(T t) {
+		Constant<T> ret = new Constant<T>(t);
+		return ret;
+	}
+
+	public static class Variable<T> extends Value<T> {
+		private T value;
+
+		public void set(T t) {
+			value = t;
+		}
+
+		@Override
+		public T get() {
+			return value;
+		}
+	}
+
+	public static <T> Variable<T> variable(T t) {
+		Variable<T> ret = new Variable<T>();
+		ret.set(t);
 		return ret;
 	}
 

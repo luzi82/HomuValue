@@ -14,4 +14,15 @@ public class T000_Value {
 		Assert.assertEquals((Integer) 100, intValue.get());
 	}
 
+	@Test
+	public void variable() {
+		Value.Variable<Integer> intValue = Value.variable(100);
+
+		Assert.assertEquals((Integer) 100, intValue.get());
+
+		intValue.set(200);
+
+		Assert.assertEquals((Integer) 200, intValue.get());
+	}
+
 }
