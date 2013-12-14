@@ -59,4 +59,55 @@ public class T001_IntegerValue {
 		Assert.assertEquals((Integer) (-5), nv.get());
 	}
 
+	@Test
+	public void product() {
+		Value<Integer> c0 = Value.constant(2);
+		Value<Integer> c1 = Value.constant(3);
+		Value<Integer> c2 = Value.constant(4);
+
+		Value<Integer> ret = IntegerValue.product(c0, c1);
+		Assert.assertEquals((Integer) (6), ret.get());
+		Assert.assertTrue(ret.isConstant);
+
+		ret = IntegerValue.product(new Value[] { c0, c1, c2 });
+		Assert.assertEquals((Integer) 24, ret.get());
+		Assert.assertTrue(ret.isConstant);
+
+		Variable<Integer> v0 = Value.variable(2);
+		Variable<Integer> v1 = Value.variable(3);
+		Variable<Integer> v2 = Value.variable(5);
+		ret = IntegerValue.product(v0, v1);
+
+		Assert.assertTrue(!ret.isConstant);
+		Assert.assertEquals((Integer) (6), ret.get());
+
+		v0.set(5);
+
+		Assert.assertEquals((Integer) (15), ret.get());
+
+		v0.set(2);
+		v1.set(3);
+		v2.set(5);
+
+		ret = IntegerValue.product(new Value[] { v0, v1, v2 });
+
+		Assert.assertTrue(!ret.isConstant);
+		Assert.assertEquals((Integer) (30), ret.get());
+
+		v0.set(5);
+
+		Assert.assertEquals((Integer) (75), ret.get());
+	}
+
+	@Test
+	public void productOpt() {
+		Value<Integer> v0 = Value.variable(2);
+		Value<Integer> v1 = Value.variable(3);
+		Value<Integer> c2 = Value.constant(0);
+
+		Value<Integer> ret = IntegerValue.product(new Value[] { v0, v1, c2 });
+		Assert.assertEquals((Integer) 0, ret.get());
+		Assert.assertTrue(ret.isConstant);
+	}
+
 }

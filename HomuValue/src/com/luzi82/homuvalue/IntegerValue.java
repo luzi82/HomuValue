@@ -57,4 +57,47 @@ public class IntegerValue {
 		return new Negative(v).optimize();
 	}
 
+	// product
+
+	@SuppressWarnings("unchecked")
+	public static Value<Integer> product(Value<Integer> a, Value<Integer> b) {
+		return product(new Value[] { a, b });
+	}
+
+	public static Value<Integer> product(Value<Integer>[] values) {
+		return new Product(values).optimize();
+	}
+
+	private static class Product extends Function<Integer> {
+
+		Value<Integer>[] values;
+
+		public Product(Value<Integer>[] values) {
+			this.values = values;
+			for (Value<Integer> v : values) {
+				addChild(v);
+			}
+		}
+
+		@Override
+		public Integer update() {
+			int ret = 1;
+			for (Value<Integer> v : values) {
+				ret *= v.get();
+				if (ret == 0)
+					return ret;
+			}
+			return ret;
+		}
+
+		@Override
+		public Value<Integer> optimize() {
+			for (Value<Integer> v : values) {
+				if (v.isConstant && v.get() == 0) {
+					return Value.constant(0);
+				}
+			}
+			return super.optimize();
+		}
+	}
 }
