@@ -4,7 +4,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.luzi82.homuvalue.Value;
-import com.luzi82.homuvalue.Value.Listener;
 
 public class T000_Value {
 
