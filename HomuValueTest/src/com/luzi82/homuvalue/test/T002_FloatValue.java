@@ -189,4 +189,21 @@ public class T002_FloatValue {
 		Assert.assertEquals((Float) 1f, ret.get());
 	}
 	
+	@Test
+	public void linear(){
+		Value<Float> ret;
+		
+		Variable<Float> u0 = Value.variable(10f);
+		Variable<Float> u1 = Value.variable(11f);
+		Variable<Float> v0 = Value.variable(1000f);
+		Variable<Float> v1 = Value.variable(1100f);
+		Variable<Float> t = Value.variable(10.5f);
+
+		ret = FloatValue.linear(u0,u1,v0,v1,t);
+		Assert.assertEquals(1050f, ret.get(),.0001);
+		
+		t.set(10.8f);
+		Assert.assertEquals(1080f, ret.get(),.0001);
+	}
+	
 }

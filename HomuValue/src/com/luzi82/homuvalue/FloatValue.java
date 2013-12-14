@@ -185,4 +185,47 @@ public class FloatValue {
 			return Math.max(a.get().floatValue(), b.get().floatValue());
 		}
 	}
+
+	// linear
+
+	public static Value<Float> linear(Value<? extends Number> u0,
+			Value<? extends Number> u1, Value<? extends Number> v0,
+			Value<? extends Number> v1, Value<? extends Number> t) {
+		return new Linear(u0, u1, v0, v1, t).optimize();
+	}
+
+	private static class Linear extends Function<Float> {
+
+		Value<? extends Number> u0;
+		Value<? extends Number> u1;
+		Value<? extends Number> v0;
+		Value<? extends Number> v1;
+		Value<? extends Number> t;
+
+		public Linear(Value<? extends Number> u0, Value<? extends Number> u1,
+				Value<? extends Number> v0, Value<? extends Number> v1,
+				Value<? extends Number> t) {
+			this.u0 = u0;
+			this.u1 = u1;
+			this.v0 = v0;
+			this.v1 = v1;
+			this.t = t;
+			addChild(u0);
+			addChild(u1);
+			addChild(v0);
+			addChild(v1);
+			addChild(t);
+		}
+
+		@Override
+		public Float update() {
+			float u0f = u0.get().floatValue();
+			float u1f = u1.get().floatValue();
+			float v0f = v0.get().floatValue();
+			float v1f = v1.get().floatValue();
+			float tf = t.get().floatValue();
+			return v0f + (v1f - v0f) * (tf - u0f) / (u1f - u0f);
+		}
+	}
+
 }
