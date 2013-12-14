@@ -21,19 +21,12 @@ public class T000_Value {
 
 		Assert.assertEquals((Integer) 100, intValue.get());
 
-		@SuppressWarnings("unchecked")
-		final Value<Integer>[] dirty = new Value[] { null };
-		Listener<Integer> intListener = new Listener<Integer>() {
-			@Override
-			public void onValueDirty(Value<Integer> v) {
-				dirty[0] = v;
-			}
-		};
+		TestListener<Integer> intListener = new TestListener<Integer>();
 		intValue.addListener(intListener);
 
 		intValue.set(200);
 
-		Assert.assertSame(intValue, dirty[0]);
+		Assert.assertSame(intValue, intListener.v);
 
 		Assert.assertEquals((Integer) 200, intValue.get());
 	}
