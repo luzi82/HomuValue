@@ -119,10 +119,10 @@ public class T001_IntegerValue {
 		ret = IntegerValue.div(v0, v1);
 		Assert.assertTrue(!ret.isConstant);
 		Assert.assertEquals((Integer) 1, ret.get());
-		
+
 		v0.set(10);
 		Assert.assertEquals((Integer) 5, ret.get());
-		
+
 		v1.set(3);
 		Assert.assertEquals((Integer) 3, ret.get());
 	}
@@ -137,7 +137,7 @@ public class T001_IntegerValue {
 		Assert.assertTrue(ret.isConstant);
 		Assert.assertEquals((Integer) 1, ret.get());
 	}
-	
+
 	@Test
 	public void divZero() {
 		Value<Integer> ret;
@@ -154,5 +154,28 @@ public class T001_IntegerValue {
 		Assert.assertTrue(!ret.isConstant);
 		Assert.assertEquals((Integer) 0, ret.get());
 	}
-	
+
+	@Test
+	public void roundUp() {
+		Value<Integer> ret;
+
+		Value<Float> v0 = Value.constant(0.3f);
+		Value<Float> v1 = Value.constant(0.8f);
+
+		ret = IntegerValue.floor(v0);
+		Assert.assertEquals((Integer) 0, ret.get());
+		ret = IntegerValue.floor(v1);
+		Assert.assertEquals((Integer) 0, ret.get());
+
+		ret = IntegerValue.ceil(v0);
+		Assert.assertEquals((Integer) 1, ret.get());
+		ret = IntegerValue.ceil(v1);
+		Assert.assertEquals((Integer) 1, ret.get());
+
+		ret = IntegerValue.round(v0);
+		Assert.assertEquals((Integer) 0, ret.get());
+		ret = IntegerValue.round(v1);
+		Assert.assertEquals((Integer) 1, ret.get());
+	}
+
 }
