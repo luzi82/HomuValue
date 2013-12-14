@@ -132,4 +132,52 @@ public class FloatValue {
 			return super.optimize();
 		}
 	}
+
+	// min
+
+	public static Value<Float> min(Value<Float> a, Value<Float> b) {
+		return new Min(a, b).optimize();
+	}
+
+	private static class Min extends Function<Float> {
+
+		Value<Float> a;
+		Value<Float> b;
+
+		public Min(Value<Float> a, Value<Float> b) {
+			this.a = a;
+			this.b = b;
+			addChild(a);
+			addChild(b);
+		}
+
+		@Override
+		public Float update() {
+			return Math.min(a.get(), b.get());
+		}
+	}
+
+	// max
+
+	public static Value<Float> max(Value<Float> a, Value<Float> b) {
+		return new Max(a, b).optimize();
+	}
+
+	private static class Max extends Function<Float> {
+
+		Value<Float> a;
+		Value<Float> b;
+
+		public Max(Value<Float> a, Value<Float> b) {
+			this.a = a;
+			this.b = b;
+			addChild(a);
+			addChild(b);
+		}
+
+		@Override
+		public Float update() {
+			return Math.max(a.get(), b.get());
+		}
+	}
 }

@@ -128,6 +128,34 @@ public class T001_IntegerValue {
 	}
 
 	@Test
+	public void divConst() {
+		Value<Integer> ret;
+
+		Value<Integer> v0 = Value.constant(3);
+		Value<Integer> v1 = Value.constant(2);
+		ret = IntegerValue.div(v0, v1);
+		Assert.assertTrue(ret.isConstant);
+		Assert.assertEquals((Integer) 1, ret.get());
+	}
+
+	@Test
+	public void divZero() {
+		Value<Integer> ret;
+
+		Value<Integer> v0 = Value.constant(0);
+		Value<Integer> v1 = Value.variable(2);
+		ret = IntegerValue.div(v0, v1);
+		Assert.assertTrue(ret.isConstant);
+		Assert.assertEquals((Integer) 0, ret.get());
+
+		v0 = Value.variable(0);
+		v1 = Value.variable(2);
+		ret = IntegerValue.div(v0, v1);
+		Assert.assertTrue(!ret.isConstant);
+		Assert.assertEquals((Integer) 0, ret.get());
+	}
+
+	@Test
 	public void min() {
 		Value<Integer> ret;
 
@@ -160,35 +188,7 @@ public class T001_IntegerValue {
 		v1.set(-1);
 		Assert.assertEquals((Integer) 1, ret.get());
 	}
-
-	@Test
-	public void divConst() {
-		Value<Integer> ret;
-
-		Value<Integer> v0 = Value.constant(3);
-		Value<Integer> v1 = Value.constant(2);
-		ret = IntegerValue.div(v0, v1);
-		Assert.assertTrue(ret.isConstant);
-		Assert.assertEquals((Integer) 1, ret.get());
-	}
-
-	@Test
-	public void divZero() {
-		Value<Integer> ret;
-
-		Value<Integer> v0 = Value.constant(0);
-		Value<Integer> v1 = Value.variable(2);
-		ret = IntegerValue.div(v0, v1);
-		Assert.assertTrue(ret.isConstant);
-		Assert.assertEquals((Integer) 0, ret.get());
-
-		v0 = Value.variable(0);
-		v1 = Value.variable(2);
-		ret = IntegerValue.div(v0, v1);
-		Assert.assertTrue(!ret.isConstant);
-		Assert.assertEquals((Integer) 0, ret.get());
-	}
-
+	
 	@Test
 	public void roundUp() {
 		Value<Integer> ret;
