@@ -100,6 +100,8 @@ public abstract class Value<T> {
 		private T var;
 
 		public void set(T t) {
+			if (var == t)
+				return;
 			var = t;
 			markDirty();
 		}

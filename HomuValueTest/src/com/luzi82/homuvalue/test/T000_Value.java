@@ -69,4 +69,16 @@ public class T000_Value {
 		Assert.assertSame(intValue, intListener.v);
 	}
 
+	@Test
+	public void sameNoDirty() {
+		Value.Variable<Integer> intVar = Value.variable(100);
+		Assert.assertTrue(intVar.dirty());
+
+		intVar.get();
+		Assert.assertFalse(intVar.dirty());
+
+		intVar.set(100);
+		Assert.assertFalse(intVar.dirty());
+	}
+
 }
