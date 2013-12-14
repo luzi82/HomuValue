@@ -181,6 +181,44 @@ public class IntegerValue {
 		}
 	}
 
+	// min-max
+
+	public static Value<Integer> minMax(Value<Integer> min, Value<Integer> t,
+			Value<Integer> max) {
+		return new MinMax(min, t, max).optimize();
+	}
+
+	private static class MinMax extends Function<Integer> {
+
+		Value<Integer> min;
+		Value<Integer> max;
+		Value<Integer> t;
+
+		public MinMax(Value<Integer> min, Value<Integer> t, Value<Integer> max) {
+			this.min = min;
+			this.max = max;
+			this.t = t;
+			addChild(min);
+			addChild(max);
+			addChild(t);
+		}
+
+		@Override
+		public Integer update() {
+			int minI = min.get();
+			int maxI = max.get();
+			int tI = t.get();
+
+			if (maxI < minI)
+				return tI;
+			if (tI < minI)
+				return minI;
+			if (maxI < tI)
+				return maxI;
+			return tI;
+		}
+	}
+
 	// round
 
 	private static class Round extends Function<Integer> {

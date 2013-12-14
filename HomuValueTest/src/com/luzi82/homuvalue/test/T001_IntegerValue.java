@@ -188,7 +188,29 @@ public class T001_IntegerValue {
 		v1.set(-1);
 		Assert.assertEquals((Integer) 1, ret.get());
 	}
-	
+
+	@Test
+	public void minMax() {
+		Value<Integer> ret;
+
+		Variable<Integer> v0 = Value.variable(0);
+		Variable<Integer> v1 = Value.variable(1);
+		Variable<Integer> v2 = Value.variable(2);
+		ret = IntegerValue.minMax(v0, v1, v2);
+		Assert.assertEquals((Integer) 1, ret.get());
+
+		v1.set(-1);
+		Assert.assertEquals((Integer) 0, ret.get());
+
+		v1.set(3);
+		Assert.assertEquals((Integer) 2, ret.get());
+
+		v0.set(2);
+		v1.set(1);
+		v2.set(0);
+		Assert.assertEquals((Integer) 1, ret.get());
+	}
+
 	@Test
 	public void roundUp() {
 		Value<Integer> ret;
