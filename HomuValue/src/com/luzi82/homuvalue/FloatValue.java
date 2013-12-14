@@ -8,11 +8,11 @@ public class FloatValue {
 
 	private static class Sum extends Function<Float> {
 
-		Value<Float>[] values;
+		Value<? extends Number>[] values;
 
-		public Sum(Value<Float>[] values) {
+		public Sum(Value<? extends Number>[] values) {
 			this.values = values;
-			for (Value<Float> v : values) {
+			for (Value<? extends Number> v : values) {
 				addChild(v);
 			}
 		}
@@ -20,19 +20,20 @@ public class FloatValue {
 		@Override
 		public Float update() {
 			float ret = 0;
-			for (Value<Float> v : values) {
-				ret += v.get();
+			for (Value<? extends Number> v : values) {
+				ret += v.get().floatValue();
 			}
 			return ret;
 		}
 	}
 
 	@SuppressWarnings("unchecked")
-	public static Value<Float> sum(Value<Float> a, Value<Float> b) {
+	public static Value<Float> sum(Value<? extends Number> a,
+			Value<? extends Number> b) {
 		return sum(new Value[] { a, b });
 	}
 
-	public static Value<Float> sum(Value<Float>[] values) {
+	public static Value<Float> sum(Value<? extends Number>[] values) {
 		return new Sum(values).optimize();
 	}
 
@@ -40,41 +41,42 @@ public class FloatValue {
 
 	private static class Negative extends Function<Float> {
 
-		final Value<Float> v;
+		final Value<? extends Number> v;
 
-		public Negative(Value<Float> v) {
+		public Negative(Value<? extends Number> v) {
 			this.v = v;
 			addChild(v);
 		}
 
 		@Override
 		public Float update() {
-			return -v.get();
+			return -v.get().floatValue();
 		}
 	}
 
-	public static Value<Float> negative(Value<Float> v) {
+	public static Value<Float> negative(Value<? extends Number> v) {
 		return new Negative(v).optimize();
 	}
 
 	// product
 
 	@SuppressWarnings("unchecked")
-	public static Value<Float> product(Value<Float> a, Value<Float> b) {
+	public static Value<Float> product(Value<? extends Number> a,
+			Value<? extends Number> b) {
 		return product(new Value[] { a, b });
 	}
 
-	public static Value<Float> product(Value<Float>[] values) {
+	public static Value<Float> product(Value<? extends Number>[] values) {
 		return new Product(values).optimize();
 	}
 
 	private static class Product extends Function<Float> {
 
-		Value<Float>[] values;
+		Value<? extends Number>[] values;
 
-		public Product(Value<Float>[] values) {
+		public Product(Value<? extends Number>[] values) {
 			this.values = values;
-			for (Value<Float> v : values) {
+			for (Value<? extends Number> v : values) {
 				addChild(v);
 			}
 		}
@@ -82,8 +84,8 @@ public class FloatValue {
 		@Override
 		public Float update() {
 			float ret = 1;
-			for (Value<Float> v : values) {
-				ret *= v.get();
+			for (Value<? extends Number> v : values) {
+				ret *= v.get().floatValue();
 				if (ret == 0)
 					return ret;
 			}
@@ -92,8 +94,8 @@ public class FloatValue {
 
 		@Override
 		public Value<Float> optimize() {
-			for (Value<Float> v : values) {
-				if (v.isConstant && v.get() == 0) {
+			for (Value<? extends Number> v : values) {
+				if (v.isConstant && v.get().floatValue() == 0) {
 					return Value.constant(0f);
 				}
 			}
@@ -103,16 +105,17 @@ public class FloatValue {
 
 	// div
 
-	public static Value<Float> div(Value<Float> a, Value<Float> b) {
+	public static Value<Float> div(Value<? extends Number> a,
+			Value<? extends Number> b) {
 		return new Div(a, b).optimize();
 	}
 
 	private static class Div extends Function<Float> {
 
-		Value<Float> a;
-		Value<Float> b;
+		Value<? extends Number> a;
+		Value<? extends Number> b;
 
-		public Div(Value<Float> a, Value<Float> b) {
+		public Div(Value<? extends Number> a, Value<? extends Number> b) {
 			this.a = a;
 			this.b = b;
 			addChild(a);
@@ -121,12 +124,12 @@ public class FloatValue {
 
 		@Override
 		public Float update() {
-			return a.get() / b.get();
+			return a.get().floatValue() / b.get().floatValue();
 		}
 
 		@Override
 		public Value<Float> optimize() {
-			if (a.isConstant && a.get() == 0) {
+			if (a.isConstant && a.get().floatValue() == 0) {
 				return Value.constant(0f);
 			}
 			return super.optimize();
@@ -135,16 +138,17 @@ public class FloatValue {
 
 	// min
 
-	public static Value<Float> min(Value<Float> a, Value<Float> b) {
+	public static Value<Float> min(Value<? extends Number> a,
+			Value<? extends Number> b) {
 		return new Min(a, b).optimize();
 	}
 
 	private static class Min extends Function<Float> {
 
-		Value<Float> a;
-		Value<Float> b;
+		Value<? extends Number> a;
+		Value<? extends Number> b;
 
-		public Min(Value<Float> a, Value<Float> b) {
+		public Min(Value<? extends Number> a, Value<? extends Number> b) {
 			this.a = a;
 			this.b = b;
 			addChild(a);
@@ -153,22 +157,23 @@ public class FloatValue {
 
 		@Override
 		public Float update() {
-			return Math.min(a.get(), b.get());
+			return Math.min(a.get().floatValue(), b.get().floatValue());
 		}
 	}
 
 	// max
 
-	public static Value<Float> max(Value<Float> a, Value<Float> b) {
+	public static Value<Float> max(Value<? extends Number> a,
+			Value<? extends Number> b) {
 		return new Max(a, b).optimize();
 	}
 
 	private static class Max extends Function<Float> {
 
-		Value<Float> a;
-		Value<Float> b;
+		Value<? extends Number> a;
+		Value<? extends Number> b;
 
-		public Max(Value<Float> a, Value<Float> b) {
+		public Max(Value<? extends Number> a, Value<? extends Number> b) {
 			this.a = a;
 			this.b = b;
 			addChild(a);
@@ -177,7 +182,7 @@ public class FloatValue {
 
 		@Override
 		public Float update() {
-			return Math.max(a.get(), b.get());
+			return Math.max(a.get().floatValue(), b.get().floatValue());
 		}
 	}
 }
