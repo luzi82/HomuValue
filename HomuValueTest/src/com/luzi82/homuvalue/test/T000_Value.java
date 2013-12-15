@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import com.luzi82.homuvalue.Value;
 import com.luzi82.homuvalue.Value.Slot;
+import com.luzi82.homuvalue.Value.Variable;
 
 public class T000_Value {
 
@@ -81,16 +82,74 @@ public class T000_Value {
 		intVar.set(100);
 		Assert.assertFalse(intVar.dirty());
 	}
-	
+
 	@Test
-	public void slot(){
+	public void slot() {
 		Slot<Integer> slot = Value.slot(100);
 		Assert.assertEquals((Integer) 100, slot.get());
-		
+
 		slot.set(Value.constant(150));
 		Assert.assertEquals((Integer) 150, slot.get());
 	}
-	
+
+	@Test
+	public void slotDirty() {
+		Slot<Integer> slot = Value.slot(100);
+		slot.get();
+		Assert.assertFalse(slot.dirty());
+
+		Variable<Integer> intV0 = Value.variable(200);
+		slot.set(intV0);
+		Assert.assertTrue(slot.dirty());
+
+		slot.get();
+		Assert.assertFalse(slot.dirty());
+
+		intV0.set(300);
+		Assert.assertTrue(slot.dirty());
+	}
+
+	@Test
+	public void slotUndirty() {
+		Slot<Integer> slot = Value.slot(100);
+
+		Variable<Integer> intV0 = Value.variable(200);
+		slot.set(intV0);
+
+		slot.get();
+		Assert.assertFalse(slot.dirty());
+
+		Variable<Integer> intV1 = Value.variable(300);
+		slot.set(intV1);
+
+		slot.get();
+		Assert.assertFalse(slot.dirty());
+
+		intV0.set(400);
+		Assert.assertFalse(slot.dirty());
+	}
+
+	@Test
+	public void slotDefault() {
+		Slot<Integer> slot = Value.slot(100);
+
+		Variable<Integer> intV0 = Value.variable(200);
+		slot.set(intV0);
+
+		Assert.assertTrue(slot.dirty());
+		Assert.assertEquals(200, (int) slot.get());
+		Assert.assertFalse(slot.dirty());
+
+		slot.set(null);
+		Assert.assertTrue(slot.dirty());
+
+		Assert.assertEquals(100, (int) slot.get());
+		Assert.assertFalse(slot.dirty());
+
+		intV0.set(400);
+		Assert.assertFalse(slot.dirty());
+	}
+
 	@Test
 	public void removeListener() {
 		Value.Variable<Integer> intValue = Value.variable(100);
@@ -105,9 +164,9 @@ public class T000_Value {
 		Assert.assertSame(intValue, intListener.v);
 
 		intListener.v = null;
-		
+
 		intValue.get();
-		
+
 		intValue.removeListener(intListener);
 
 		intValue.set(300);

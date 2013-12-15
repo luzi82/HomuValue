@@ -182,7 +182,7 @@ public abstract class Value<T> {
 		return new Slot<T>(t);
 	}
 
-	public static class Slot<T> extends Dynamic<T> {
+	public static class Slot<T> extends Dynamic<T> implements Listener {
 		private Value<T> v;
 		private T def;
 
@@ -191,34 +191,40 @@ public abstract class Value<T> {
 		}
 
 		public void set(Value<T> v) {
-			// TODO remove old v.listener before change to new v
-			// careful of double listen
 			if (this.v == v)
 				return;
 			if (dirty()) {
-				this.v = v;
+				changeV(v);
 				return;
 			}
 			if (v == null) {
 				if (get() != def) {
 					markDirty();
 				}
-				this.v = v;
+				changeV(v);
 				return;
 			}
 			if (v.dirty()) {
 				markDirty();
-				this.v = v;
+				changeV(v);
 				return;
 			}
 			T oldV = get();
 			T newV = v.get();
 			if (oldV != newV) {
 				markDirty();
-				this.v = v;
+				changeV(v);
 				return;
 			}
+			changeV(v);
+		}
+
+		private void changeV(Value<T> v) {
+			if (this.v != null)
+				this.v.removeListener(this);
 			this.v = v;
+			if (this.v != null)
+				this.v.addListener(this);
 		}
 
 		@Override
@@ -227,6 +233,11 @@ public abstract class Value<T> {
 				return def;
 			}
 			return v.get();
+		}
+
+		@Override
+		public void onValueDirty(Value v) {
+			markDirty();
 		}
 	}
 
