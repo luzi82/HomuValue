@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.luzi82.homuvalue.Value;
+import com.luzi82.homuvalue.Value.Slot;
 
 public class T000_Value {
 
@@ -79,6 +80,40 @@ public class T000_Value {
 
 		intVar.set(100);
 		Assert.assertFalse(intVar.dirty());
+	}
+	
+	@Test
+	public void slot(){
+		Slot<Integer> slot = Value.slot(100);
+		Assert.assertEquals((Integer) 100, slot.get());
+		
+		slot.set(Value.constant(150));
+		Assert.assertEquals((Integer) 150, slot.get());
+	}
+	
+	@Test
+	public void removeListener() {
+		Value.Variable<Integer> intValue = Value.variable(100);
+
+		intValue.get();
+
+		TestListener<Integer> intListener = new TestListener<Integer>();
+		intValue.addListener(intListener);
+
+		intValue.set(200);
+
+		Assert.assertSame(intValue, intListener.v);
+
+		intListener.v = null;
+		
+		intValue.get();
+		
+		intValue.removeListener(intListener);
+
+		intValue.set(300);
+
+		Assert.assertNull(intListener.v);
+
 	}
 
 }

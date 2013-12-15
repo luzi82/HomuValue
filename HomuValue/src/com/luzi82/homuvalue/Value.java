@@ -9,6 +9,8 @@ public abstract class Value<T> {
 
 	public abstract void addListener(Listener<T> listener);
 
+	public abstract void removeListener(Listener<T> intListener);
+
 	public final boolean isConstant;
 
 	public Value(boolean isConstant) {
@@ -36,9 +38,15 @@ public abstract class Value<T> {
 		}
 
 		@Override
+		public void removeListener(Listener<T> intListener) {
+			// do nothing
+		}
+
+		@Override
 		public boolean dirty() {
 			return false;
 		}
+
 	}
 
 	public static <T> Constant<T> constant(T t) {
@@ -91,6 +99,22 @@ public abstract class Value<T> {
 		}
 
 		@Override
+		public final void removeListener(Listener<T> listener) {
+			WeakReference<Listener<T>> target = null;
+			LinkedList<WeakReference<Listener<T>>> deadList = new LinkedList<WeakReference<Listener<T>>>();
+			for (WeakReference<Listener<T>> ref : list) {
+				Listener<T> l = ref.get();
+				if (l == null) {
+					deadList.add(ref);
+				} else if (l == listener) {
+					target = ref;
+				}
+			}
+			list.removeAll(deadList);
+			list.remove(target);
+		}
+
+		@Override
 		public boolean dirty() {
 			return dirty;
 		}
@@ -110,6 +134,7 @@ public abstract class Value<T> {
 		public T update() {
 			return var;
 		}
+
 	}
 
 	public static <T> Variable<T> variable(T t) {
@@ -149,6 +174,60 @@ public abstract class Value<T> {
 
 		public void onValueDirty(Value<T> v);
 
+	}
+
+	// slot
+
+	public static <T> Slot<T> slot(T t) {
+		return new Slot<T>(t);
+	}
+
+	public static class Slot<T> extends Dynamic<T> {
+		private Value<T> v;
+		private T def;
+
+		public Slot(T t) {
+			this.def = t;
+		}
+
+		public void set(Value<T> v) {
+			// TODO remove old v.listener before change to new v
+			// careful of double listen
+			if (this.v == v)
+				return;
+			if (dirty()) {
+				this.v = v;
+				return;
+			}
+			if (v == null) {
+				if (get() != def) {
+					markDirty();
+				}
+				this.v = v;
+				return;
+			}
+			if (v.dirty()) {
+				markDirty();
+				this.v = v;
+				return;
+			}
+			T oldV = get();
+			T newV = v.get();
+			if (oldV != newV) {
+				markDirty();
+				this.v = v;
+				return;
+			}
+			this.v = v;
+		}
+
+		@Override
+		public T update() {
+			if (v == null) {
+				return def;
+			}
+			return v.get();
+		}
 	}
 
 }
