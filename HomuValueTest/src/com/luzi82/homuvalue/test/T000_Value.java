@@ -3,9 +3,9 @@ package com.luzi82.homuvalue.test;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.luzi82.homuvalue.Slot;
 import com.luzi82.homuvalue.Value;
-import com.luzi82.homuvalue.Value.Slot;
-import com.luzi82.homuvalue.Value.Variable;
+import com.luzi82.homuvalue.Variable;
 
 public class T000_Value {
 
@@ -18,7 +18,7 @@ public class T000_Value {
 
 	@Test
 	public void variable() {
-		Value.Variable<Integer> intValue = Value.variable(100);
+		Variable<Integer> intValue = Value.variable(100);
 
 		Assert.assertEquals((Integer) 100, intValue.get());
 
@@ -32,7 +32,7 @@ public class T000_Value {
 		Value<Integer> intValue = Value.constant(100);
 		Assert.assertFalse(intValue.dirty());
 
-		Value.Variable<Integer> intVar = Value.variable(100);
+		Variable<Integer> intVar = Value.variable(100);
 		Assert.assertTrue(intVar.dirty());
 
 		intVar.get();
@@ -47,7 +47,7 @@ public class T000_Value {
 
 	@Test
 	public void dirtyListener() {
-		Value.Variable<Integer> intValue = Value.variable(100);
+		Variable<Integer> intValue = Value.variable(100);
 
 		TestListener<Integer> intListener = new TestListener<Integer>();
 		intValue.addListener(intListener);
@@ -73,7 +73,7 @@ public class T000_Value {
 
 	@Test
 	public void sameNoDirty() {
-		Value.Variable<Integer> intVar = Value.variable(100);
+		Variable<Integer> intVar = Value.variable(100);
 		Assert.assertTrue(intVar.dirty());
 
 		intVar.get();
@@ -152,7 +152,7 @@ public class T000_Value {
 
 	@Test
 	public void removeListener() {
-		Value.Variable<Integer> intValue = Value.variable(100);
+		Variable<Integer> intValue = Value.variable(100);
 
 		intValue.get();
 

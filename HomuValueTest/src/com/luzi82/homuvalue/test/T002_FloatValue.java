@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import com.luzi82.homuvalue.FloatValue;
 import com.luzi82.homuvalue.Value;
-import com.luzi82.homuvalue.Value.Variable;
+import com.luzi82.homuvalue.Variable;
 
 public class T002_FloatValue {
 

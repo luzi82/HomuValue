@@ -1,6 +1,5 @@
 package com.luzi82.homuvalue;
 
-import com.luzi82.homuvalue.Value.Function;
 
 public class IntegerValue {
 
