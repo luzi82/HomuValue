@@ -1,8 +1,7 @@
 package com.luzi82.homuvalue;
 
-import com.luzi82.homuvalue.Value.Listener;
 
-public class Slot<T> extends Dynamic<T> implements Value.Listener {
+public class Slot<T> extends Dynamic<T> implements Value.Listener<T> {
 	private Value<T> v;
 	private T def;
 
@@ -56,7 +55,7 @@ public class Slot<T> extends Dynamic<T> implements Value.Listener {
 	}
 
 	@Override
-	public void onValueDirty(Value v) {
+	public void onValueDirty(Value<T> v) {
 		markDirty();
 	}
 }

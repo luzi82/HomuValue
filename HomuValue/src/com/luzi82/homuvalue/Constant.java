@@ -1,6 +1,5 @@
 package com.luzi82.homuvalue;
 
-import com.luzi82.homuvalue.Value.Listener;
 
 public class Constant<T> extends Value<T> {
 	private final T value;

@@ -3,8 +3,6 @@ package com.luzi82.homuvalue;
 import java.lang.ref.WeakReference;
 import java.util.LinkedList;
 
-import com.luzi82.homuvalue.Value.Listener;
-
 public abstract class Dynamic<T> extends Value<T> {
 	private T value;
 	private boolean dirty;

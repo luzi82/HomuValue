@@ -1,6 +1,5 @@
 package com.luzi82.homuvalue;
 
-import com.luzi82.homuvalue.Value.Listener;
 
 @SuppressWarnings("rawtypes")
 public abstract class Function<T> extends Dynamic<T> implements
