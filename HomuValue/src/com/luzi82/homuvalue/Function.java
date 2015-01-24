@@ -1,22 +1,14 @@
 package com.luzi82.homuvalue;
 
-
-@SuppressWarnings("rawtypes")
-public abstract class Function<T> extends Dynamic<T> implements
-		Value.Listener {
+public abstract class Function<T> extends Group<T> {
 	public boolean isConst = true;
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected void addChild(Value v) {
 		v.addListener(this);
 		if (isConst && !v.isConstant) {
 			isConst = false;
 		}
-	}
-
-	@Override
-	public void onValueDirty(Value v) {
-		markDirty();
 	}
 
 	public Value<T> optimize() {
