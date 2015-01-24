@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import com.luzi82.homuvalue.FloatValue;
 import com.luzi82.homuvalue.Value;
-import com.luzi82.homuvalue.Variable;
+import com.luzi82.homuvalue.LocalVariable;
 
 public class T002_FloatValue {
 
@@ -26,8 +26,8 @@ public class T002_FloatValue {
 
 	@Test
 	public void sumVar() {
-		Variable<Float> i3 = Value.variable(3f);
-		Variable<Float> i4 = Value.variable(4f);
+		LocalVariable<Float> i3 = Value.variable(3f);
+		LocalVariable<Float> i4 = Value.variable(4f);
 
 		Value<Float> i7 = FloatValue.sum(i3, i4);
 		Assert.assertEquals(7f, i7.get(), .0001f);
@@ -47,7 +47,7 @@ public class T002_FloatValue {
 		Assert.assertEquals(-3f, nc.get(), .0001f);
 		Assert.assertTrue(nc.isConstant);
 
-		Variable<Float> v = Value.variable(4f);
+		LocalVariable<Float> v = Value.variable(4f);
 		Value<Float> nv = FloatValue.negative(v);
 
 		Assert.assertTrue(!nv.isConstant);
@@ -73,9 +73,9 @@ public class T002_FloatValue {
 		Assert.assertEquals(24f, ret.get(), .0001f);
 		Assert.assertTrue(ret.isConstant);
 
-		Variable<Float> v0 = Value.variable(2f);
-		Variable<Float> v1 = Value.variable(3f);
-		Variable<Float> v2 = Value.variable(5f);
+		LocalVariable<Float> v0 = Value.variable(2f);
+		LocalVariable<Float> v1 = Value.variable(3f);
+		LocalVariable<Float> v2 = Value.variable(5f);
 		ret = FloatValue.product(v0, v1);
 
 		Assert.assertTrue(!ret.isConstant);
@@ -114,8 +114,8 @@ public class T002_FloatValue {
 	public void div() {
 		Value<Float> ret;
 
-		Variable<Float> v0 = Value.variable(3f);
-		Variable<Float> v1 = Value.variable(2f);
+		LocalVariable<Float> v0 = Value.variable(3f);
+		LocalVariable<Float> v1 = Value.variable(2f);
 		ret = FloatValue.div(v0, v1);
 		Assert.assertTrue(!ret.isConstant);
 		Assert.assertEquals(1.5f, ret.get(), 0.0001);
@@ -159,8 +159,8 @@ public class T002_FloatValue {
 	public void min() {
 		Value<Float> ret;
 
-		Variable<Float> v0 = Value.variable(3f);
-		Variable<Float> v1 = Value.variable(2f);
+		LocalVariable<Float> v0 = Value.variable(3f);
+		LocalVariable<Float> v1 = Value.variable(2f);
 		ret = FloatValue.min(v0, v1);
 		Assert.assertTrue(!ret.isConstant);
 		Assert.assertEquals((Float) 2f, ret.get());
@@ -176,8 +176,8 @@ public class T002_FloatValue {
 	public void max() {
 		Value<Float> ret;
 
-		Variable<Float> v0 = Value.variable(3f);
-		Variable<Float> v1 = Value.variable(2f);
+		LocalVariable<Float> v0 = Value.variable(3f);
+		LocalVariable<Float> v1 = Value.variable(2f);
 		ret = FloatValue.max(v0, v1);
 		Assert.assertTrue(!ret.isConstant);
 		Assert.assertEquals((Float) 3f, ret.get());
@@ -193,9 +193,9 @@ public class T002_FloatValue {
 	public void minMax() {
 		Value<Float> ret;
 
-		Variable<Float> v0 = Value.variable(0f);
-		Variable<Float> v1 = Value.variable(1f);
-		Variable<Float> v2 = Value.variable(2f);
+		LocalVariable<Float> v0 = Value.variable(0f);
+		LocalVariable<Float> v1 = Value.variable(1f);
+		LocalVariable<Float> v2 = Value.variable(2f);
 		ret = FloatValue.minMax(v0, v1, v2);
 		Assert.assertEquals((Float) 1f, ret.get());
 
@@ -215,11 +215,11 @@ public class T002_FloatValue {
 	public void linear(){
 		Value<Float> ret;
 		
-		Variable<Float> u0 = Value.variable(10f);
-		Variable<Float> u1 = Value.variable(11f);
-		Variable<Float> v0 = Value.variable(1000f);
-		Variable<Float> v1 = Value.variable(1100f);
-		Variable<Float> t = Value.variable(10.5f);
+		LocalVariable<Float> u0 = Value.variable(10f);
+		LocalVariable<Float> u1 = Value.variable(11f);
+		LocalVariable<Float> v0 = Value.variable(1000f);
+		LocalVariable<Float> v1 = Value.variable(1100f);
+		LocalVariable<Float> t = Value.variable(10.5f);
 
 		ret = FloatValue.linear(u0,u1,v0,v1,t);
 		Assert.assertEquals(1050f, ret.get(),.0001);

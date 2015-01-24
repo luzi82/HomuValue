@@ -1,6 +1,6 @@
 package com.luzi82.homuvalue;
 
-public class Variable<T> extends Dynamic<T> {
+public class LocalVariable<T> extends Dynamic<T> {
 	private T var;
 
 	public void set(T t) {

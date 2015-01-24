@@ -22,8 +22,8 @@ public abstract class Value<T> {
 		return ret;
 	}
 
-	public static <T> Variable<T> variable(T t) {
-		Variable<T> ret = new Variable<T>();
+	public static <T> LocalVariable<T> variable(T t) {
+		LocalVariable<T> ret = new LocalVariable<T>();
 		ret.set(t);
 		return ret;
 	}

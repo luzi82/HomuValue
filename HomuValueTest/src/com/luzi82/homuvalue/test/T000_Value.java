@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import com.luzi82.homuvalue.Slot;
 import com.luzi82.homuvalue.Value;
-import com.luzi82.homuvalue.Variable;
+import com.luzi82.homuvalue.LocalVariable;
 
 public class T000_Value {
 
@@ -18,7 +18,7 @@ public class T000_Value {
 
 	@Test
 	public void variable() {
-		Variable<Integer> intValue = Value.variable(100);
+		LocalVariable<Integer> intValue = Value.variable(100);
 
 		Assert.assertEquals((Integer) 100, intValue.get());
 
@@ -32,7 +32,7 @@ public class T000_Value {
 		Value<Integer> intValue = Value.constant(100);
 		Assert.assertFalse(intValue.dirty());
 
-		Variable<Integer> intVar = Value.variable(100);
+		LocalVariable<Integer> intVar = Value.variable(100);
 		Assert.assertTrue(intVar.dirty());
 
 		intVar.get();
@@ -47,7 +47,7 @@ public class T000_Value {
 
 	@Test
 	public void dirtyListener() {
-		Variable<Integer> intValue = Value.variable(100);
+		LocalVariable<Integer> intValue = Value.variable(100);
 
 		TestListener<Integer> intListener = new TestListener<Integer>();
 		intValue.addListener(intListener);
@@ -73,7 +73,7 @@ public class T000_Value {
 
 	@Test
 	public void sameNoDirty() {
-		Variable<Integer> intVar = Value.variable(100);
+		LocalVariable<Integer> intVar = Value.variable(100);
 		Assert.assertTrue(intVar.dirty());
 
 		intVar.get();
@@ -98,7 +98,7 @@ public class T000_Value {
 		slot.get();
 		Assert.assertFalse(slot.dirty());
 
-		Variable<Integer> intV0 = Value.variable(200);
+		LocalVariable<Integer> intV0 = Value.variable(200);
 		slot.set(intV0);
 		Assert.assertTrue(slot.dirty());
 
@@ -113,13 +113,13 @@ public class T000_Value {
 	public void slotUndirty() {
 		Slot<Integer> slot = Value.slot(100);
 
-		Variable<Integer> intV0 = Value.variable(200);
+		LocalVariable<Integer> intV0 = Value.variable(200);
 		slot.set(intV0);
 
 		slot.get();
 		Assert.assertFalse(slot.dirty());
 
-		Variable<Integer> intV1 = Value.variable(300);
+		LocalVariable<Integer> intV1 = Value.variable(300);
 		slot.set(intV1);
 
 		slot.get();
@@ -133,7 +133,7 @@ public class T000_Value {
 	public void slotDefault() {
 		Slot<Integer> slot = Value.slot(100);
 
-		Variable<Integer> intV0 = Value.variable(200);
+		LocalVariable<Integer> intV0 = Value.variable(200);
 		slot.set(intV0);
 
 		Assert.assertTrue(slot.dirty());
@@ -152,7 +152,7 @@ public class T000_Value {
 
 	@Test
 	public void removeListener() {
-		Variable<Integer> intValue = Value.variable(100);
+		LocalVariable<Integer> intValue = Value.variable(100);
 
 		intValue.get();
 

@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import com.luzi82.homuvalue.IntegerValue;
 import com.luzi82.homuvalue.Value;
-import com.luzi82.homuvalue.Variable;
+import com.luzi82.homuvalue.LocalVariable;
 
 public class T001_IntegerValue {
 
@@ -26,8 +26,8 @@ public class T001_IntegerValue {
 
 	@Test
 	public void sumVar() {
-		Variable<Integer> i3 = Value.variable(3);
-		Variable<Integer> i4 = Value.variable(4);
+		LocalVariable<Integer> i3 = Value.variable(3);
+		LocalVariable<Integer> i4 = Value.variable(4);
 
 		Value<Integer> i7 = IntegerValue.sum(i3, i4);
 		Assert.assertEquals((Integer) 7, i7.get());
@@ -47,7 +47,7 @@ public class T001_IntegerValue {
 		Assert.assertEquals((Integer) (-3), nc.get());
 		Assert.assertTrue(nc.isConstant);
 
-		Variable<Integer> v = Value.variable(4);
+		LocalVariable<Integer> v = Value.variable(4);
 		Value<Integer> nv = IntegerValue.negative(v);
 
 		Assert.assertTrue(!nv.isConstant);
@@ -73,9 +73,9 @@ public class T001_IntegerValue {
 		Assert.assertEquals((Integer) 24, ret.get());
 		Assert.assertTrue(ret.isConstant);
 
-		Variable<Integer> v0 = Value.variable(2);
-		Variable<Integer> v1 = Value.variable(3);
-		Variable<Integer> v2 = Value.variable(5);
+		LocalVariable<Integer> v0 = Value.variable(2);
+		LocalVariable<Integer> v1 = Value.variable(3);
+		LocalVariable<Integer> v2 = Value.variable(5);
 		ret = IntegerValue.product(v0, v1);
 
 		Assert.assertTrue(!ret.isConstant);
@@ -114,8 +114,8 @@ public class T001_IntegerValue {
 	public void div() {
 		Value<Integer> ret;
 
-		Variable<Integer> v0 = Value.variable(3);
-		Variable<Integer> v1 = Value.variable(2);
+		LocalVariable<Integer> v0 = Value.variable(3);
+		LocalVariable<Integer> v1 = Value.variable(2);
 		ret = IntegerValue.div(v0, v1);
 		Assert.assertTrue(!ret.isConstant);
 		Assert.assertEquals((Integer) 1, ret.get());
@@ -159,8 +159,8 @@ public class T001_IntegerValue {
 	public void min() {
 		Value<Integer> ret;
 
-		Variable<Integer> v0 = Value.variable(3);
-		Variable<Integer> v1 = Value.variable(2);
+		LocalVariable<Integer> v0 = Value.variable(3);
+		LocalVariable<Integer> v1 = Value.variable(2);
 		ret = IntegerValue.min(v0, v1);
 		Assert.assertTrue(!ret.isConstant);
 		Assert.assertEquals((Integer) 2, ret.get());
@@ -176,8 +176,8 @@ public class T001_IntegerValue {
 	public void max() {
 		Value<Integer> ret;
 
-		Variable<Integer> v0 = Value.variable(3);
-		Variable<Integer> v1 = Value.variable(2);
+		LocalVariable<Integer> v0 = Value.variable(3);
+		LocalVariable<Integer> v1 = Value.variable(2);
 		ret = IntegerValue.max(v0, v1);
 		Assert.assertTrue(!ret.isConstant);
 		Assert.assertEquals((Integer) 3, ret.get());
@@ -193,9 +193,9 @@ public class T001_IntegerValue {
 	public void minMax() {
 		Value<Integer> ret;
 
-		Variable<Integer> v0 = Value.variable(0);
-		Variable<Integer> v1 = Value.variable(1);
-		Variable<Integer> v2 = Value.variable(2);
+		LocalVariable<Integer> v0 = Value.variable(0);
+		LocalVariable<Integer> v1 = Value.variable(1);
+		LocalVariable<Integer> v2 = Value.variable(2);
 		ret = IntegerValue.minMax(v0, v1, v2);
 		Assert.assertEquals((Integer) 1, ret.get());
 
