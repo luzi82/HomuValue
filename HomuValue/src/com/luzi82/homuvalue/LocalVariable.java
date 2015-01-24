@@ -1,17 +1,15 @@
 package com.luzi82.homuvalue;
 
-public class LocalVariable<T> extends Dynamic<T> {
+public class LocalVariable<T> extends Variable<T> {
 	private T var;
 
-	public void set(T t) {
-		if (var == t)
-			return;
+	@Override
+	protected void variableSet(T t) {
 		var = t;
-		markDirty();
 	}
 
 	@Override
-	public T update() {
+	protected T variableGet() {
 		return var;
 	}
 

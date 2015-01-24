@@ -14,8 +14,8 @@ public abstract class Variable<T> extends Dynamic<T> {
 		return variableGet();
 	}
 
-	public abstract void variableSet(T t);
+	protected abstract void variableSet(T t);
 
-	public abstract T variableGet();
+	protected abstract T variableGet();
 
 }
