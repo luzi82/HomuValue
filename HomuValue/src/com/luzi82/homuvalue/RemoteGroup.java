@@ -10,6 +10,9 @@ public class RemoteGroup<V> extends Group<V> {
 
 	@Override
 	public V update() {
+		for (Value v : childSet) {
+			v.get();
+		}
 		return iV;
 	}
 

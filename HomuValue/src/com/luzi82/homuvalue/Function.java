@@ -3,9 +3,9 @@ package com.luzi82.homuvalue;
 public abstract class Function<T> extends Group<T> {
 	public boolean isConst = true;
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({ "rawtypes" })
 	protected void addChild(Value v) {
-		v.addListener(this);
+		super.addChild(v);
 		if (isConst && !v.isConstant) {
 			isConst = false;
 		}
