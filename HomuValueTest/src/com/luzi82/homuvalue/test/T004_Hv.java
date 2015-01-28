@@ -7,14 +7,14 @@ import java.util.Map;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.luzi82.homuvalue.obj.HvMap;
-import com.luzi82.homuvalue.obj.HvTypeList;
+import com.luzi82.homuvalue.obj.ObjectVariable;
+import com.luzi82.homuvalue.obj.TypeListVariable;
 import com.luzi82.homuvalue.obj.VariableListVariable;
 
 public class T004_Hv {
 
-	public static class O extends HvMap {
-		public HvMap.TypeField<Integer> i = new HvMap.TypeField<Integer>("i");
+	public static class O extends ObjectVariable {
+		public ObjectVariable.TypeField<Integer> i = new ObjectVariable.TypeField<Integer>("i");
 
 		public O() {
 			addField(i);
@@ -54,8 +54,8 @@ public class T004_Hv {
 			throw new Error(e);
 		}
 
-		class OO extends HvMap {
-			public HvMap.VarField<O, Map<String, Object>> j = new HvMap.VarField<O, Map<String, Object>>("j", constructor[0]);
+		class OO extends ObjectVariable {
+			public ObjectVariable.VarField<O, Map<String, Object>> j = new ObjectVariable.VarField<O, Map<String, Object>>("j", constructor[0]);
 
 			public OO() {
 				addField(j);
@@ -91,7 +91,7 @@ public class T004_Hv {
 
 	@Test
 	public void t2() {
-		HvTypeList<Integer> i = new HvTypeList<Integer>();
+		TypeListVariable<Integer> i = new TypeListVariable<Integer>();
 
 		List<Integer> l = i.get();
 		Assert.assertEquals(0, l.size());

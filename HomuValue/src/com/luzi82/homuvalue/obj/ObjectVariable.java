@@ -8,7 +8,7 @@ import com.luzi82.homuvalue.AbstractValue;
 import com.luzi82.homuvalue.AbstractVariable;
 import com.luzi82.homuvalue.Value;
 
-public class HvMap extends AbstractVariable<Map<String, Object>> {
+public class ObjectVariable extends AbstractVariable<Map<String, Object>> {
 
 	protected HashMap<String, Field> mFieldMap = new HashMap<String, Field>();
 
@@ -22,7 +22,7 @@ public class HvMap extends AbstractVariable<Map<String, Object>> {
 	private Listener mListener = new Listener() {
 		@Override
 		public void onValueDirty(Value v) {
-			HvMap.this.markDirty();
+			ObjectVariable.this.markDirty();
 		}
 	};
 
