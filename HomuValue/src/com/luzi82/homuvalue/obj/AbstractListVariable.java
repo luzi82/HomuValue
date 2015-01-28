@@ -50,7 +50,7 @@ public abstract class AbstractListVariable<I, O> extends LinkedList<I> implement
 	public void set(List<O> t) {
 		super.clear();
 		for (O o : t) {
-			add(toI(o));
+			super.add(toI(o));
 		}
 		mDirty.set(true);
 	}
