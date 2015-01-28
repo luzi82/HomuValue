@@ -3,7 +3,6 @@ package com.luzi82.homuvalue.obj;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
-import java.util.List;
 
 import com.luzi82.homuvalue.AbstractVariable;
 import com.luzi82.homuvalue.Value;

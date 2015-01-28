@@ -4,7 +4,6 @@ import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.luzi82.homuvalue.AbstractValue;
 import com.luzi82.homuvalue.AbstractVariable;
 import com.luzi82.homuvalue.Value;
 

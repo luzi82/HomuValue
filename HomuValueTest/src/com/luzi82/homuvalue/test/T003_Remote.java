@@ -3,8 +3,8 @@ package com.luzi82.homuvalue.test;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.luzi82.homuvalue.RemoteGroup;
 import com.luzi82.homuvalue.AbstractVariable;
+import com.luzi82.homuvalue.RemoteGroup;
 
 public class T003_Remote {
 
