@@ -8,13 +8,13 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.luzi82.homuvalue.obj.ObjectVariable;
-import com.luzi82.homuvalue.obj.TypeListVariable;
+import com.luzi82.homuvalue.obj.ObjectListVariable;
 import com.luzi82.homuvalue.obj.VariableListVariable;
 
 public class T004_Hv {
 
 	public static class O extends ObjectVariable {
-		public ObjectVariable.TypeField<Integer> i = new ObjectVariable.TypeField<Integer>("i");
+		public ObjectVariable.ObjectField<Integer> i = new ObjectVariable.ObjectField<Integer>("i");
 
 		public O() {
 			addField(i);
@@ -91,7 +91,7 @@ public class T004_Hv {
 
 	@Test
 	public void t2() {
-		TypeListVariable<Integer> i = new TypeListVariable<Integer>();
+		ObjectListVariable<Integer> i = new ObjectListVariable<Integer>();
 
 		List<Integer> l = i.get();
 		Assert.assertEquals(0, l.size());

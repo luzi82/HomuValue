@@ -73,9 +73,9 @@ public class ObjectVariable extends AbstractVariable<Map<String, Object>> {
 
 	}
 
-	public static class TypeField<O> extends Field<O, O> {
+	public static class ObjectField<O> extends Field<O, O> {
 
-		public TypeField(String aName) {
+		public ObjectField(String aName) {
 			super(aName);
 		}
 
