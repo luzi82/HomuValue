@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.luzi82.homuvalue.RemoteGroup;
-import com.luzi82.homuvalue.Variable;
+import com.luzi82.homuvalue.AbstractVariable;
 
 public class T003_Remote {
 
@@ -15,11 +15,11 @@ public class T003_Remote {
 		}
 
 		class T extends RemoteGroup<I> {
-			public final Variable<Integer> i;
+			public final AbstractVariable<Integer> i;
 
 			public T(I aV) {
 				super(aV);
-				i = new Variable<Integer>() {
+				i = new AbstractVariable<Integer>() {
 					@Override
 					protected void variableSet(Integer t) {
 						iV.i = t;
@@ -50,7 +50,7 @@ public class T003_Remote {
 	public void t1() {
 		final int[] i = { 0 };
 
-		Variable<Integer> v = new Variable<Integer>() {
+		AbstractVariable<Integer> v = new AbstractVariable<Integer>() {
 			@Override
 			protected void variableSet(Integer t) {
 				i[0] = t;

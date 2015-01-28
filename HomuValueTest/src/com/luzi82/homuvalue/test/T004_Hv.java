@@ -1,0 +1,139 @@
+package com.luzi82.homuvalue.test;
+
+import java.lang.reflect.Constructor;
+import java.util.List;
+import java.util.Map;
+
+import org.junit.Assert;
+import org.junit.Test;
+
+import com.luzi82.homuvalue.obj.HvMap;
+import com.luzi82.homuvalue.obj.HvTypeList;
+import com.luzi82.homuvalue.obj.VariableListVariable;
+
+public class T004_Hv {
+
+	public static class O extends HvMap {
+		public HvMap.TypeField<Integer> i = new HvMap.TypeField<Integer>("i");
+
+		public O() {
+			addField(i);
+		}
+	}
+
+	@Test
+	public void t0() {
+		O o = new O();
+		o.i.set(1);
+
+		Map<String, Object> m = o.get();
+		Assert.assertEquals(1, m.get("i"));
+
+		TestListener tl = new TestListener();
+		o.addListener(tl);
+
+		o.i.set(2);
+
+		Assert.assertEquals(o, tl.v);
+
+		o.get();
+		tl.v = null;
+
+		o.i.set(2);
+
+		Assert.assertEquals(null, tl.v);
+	}
+
+	@Test
+	public void t1() {
+
+		final Constructor[] constructor = new Constructor[1];
+		try {
+			constructor[0] = O.class.getConstructor();
+		} catch (Exception e) {
+			throw new Error(e);
+		}
+
+		class OO extends HvMap {
+			public HvMap.VarField<O, Map<String, Object>> j = new HvMap.VarField<O, Map<String, Object>>("j", constructor[0]);
+
+			public OO() {
+				addField(j);
+			}
+		}
+
+		OO oo = new OO();
+		oo.j.set(new O());
+		oo.j.get().i.set(1);
+
+		Map<String, Object> mm = oo.get();
+		Map<String, Object> m = (Map<String, Object>) mm.get("j");
+		Assert.assertEquals(1, m.get("i"));
+
+		TestListener tl = new TestListener();
+		oo.addListener(tl);
+
+		oo.j.get().i.set(2);
+
+		Assert.assertEquals(oo, tl.v);
+
+		oo.get();
+		tl.v = null;
+
+		oo.j.get().i.set(2);
+
+		Assert.assertEquals(null, tl.v);
+
+		oo.j.set(new O());
+
+		Assert.assertEquals(oo, tl.v);
+	}
+
+	@Test
+	public void t2() {
+		HvTypeList<Integer> i = new HvTypeList<Integer>();
+
+		List<Integer> l = i.get();
+		Assert.assertEquals(0, l.size());
+
+		TestListener tl = new TestListener();
+		i.addListener(tl);
+
+		i.add(42);
+
+		Assert.assertEquals(i, tl.v);
+
+		l = i.get();
+		Assert.assertEquals(1, l.size());
+		Assert.assertEquals(42, (int) l.get(0));
+	}
+
+	@Test
+	public void t3() {
+		final Constructor[] constructor = new Constructor[1];
+		try {
+			constructor[0] = O.class.getConstructor();
+		} catch (Exception e) {
+			throw new Error(e);
+		}
+
+		VariableListVariable<O, Map<String, Object>> i = new VariableListVariable<O, Map<String, Object>>(constructor[0]);
+
+		List<Map<String, Object>> l = i.get();
+		Assert.assertEquals(0, l.size());
+
+		TestListener tl = new TestListener();
+		i.addListener(tl);
+
+		O o = new O();
+		o.i.set(42);
+		i.add(o);
+
+		Assert.assertEquals(i, tl.v);
+
+		l = i.get();
+		Assert.assertEquals(1, l.size());
+		Assert.assertEquals(42, l.get(0).get("i"));
+	}
+
+}

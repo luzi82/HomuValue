@@ -5,7 +5,7 @@ import java.util.IdentityHashMap;
 import java.util.Set;
 
 @SuppressWarnings("rawtypes")
-public abstract class Group<V> extends Dynamic<V> implements Value.Listener {
+public abstract class Group<V> extends AbstractDynamic<V> implements Value.Listener {
 
 	protected Set<Value> childSet = Collections.newSetFromMap(new IdentityHashMap<Value, Boolean>());
 

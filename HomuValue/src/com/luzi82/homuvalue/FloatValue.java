@@ -1,6 +1,5 @@
 package com.luzi82.homuvalue;
 
-
 public class FloatValue {
 
 	// sum
@@ -27,8 +26,7 @@ public class FloatValue {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static Value<Float> sum(Value<? extends Number> a,
-			Value<? extends Number> b) {
+	public static Value<Float> sum(Value<? extends Number> a, Value<? extends Number> b) {
 		return sum(new Value[] { a, b });
 	}
 
@@ -60,8 +58,7 @@ public class FloatValue {
 	// product
 
 	@SuppressWarnings("unchecked")
-	public static Value<Float> product(Value<? extends Number> a,
-			Value<? extends Number> b) {
+	public static Value<Float> product(Value<? extends Number> a, Value<? extends Number> b) {
 		return product(new Value[] { a, b });
 	}
 
@@ -94,8 +91,8 @@ public class FloatValue {
 		@Override
 		public Value<Float> optimize() {
 			for (Value<? extends Number> v : values) {
-				if (v.isConstant && v.get().floatValue() == 0) {
-					return Value.constant(0f);
+				if (v.isConstant() && v.get().floatValue() == 0) {
+					return new Constant<Float>(0f);
 				}
 			}
 			return super.optimize();
@@ -104,8 +101,7 @@ public class FloatValue {
 
 	// div
 
-	public static Value<Float> div(Value<? extends Number> a,
-			Value<? extends Number> b) {
+	public static Value<Float> div(Value<? extends Number> a, Value<? extends Number> b) {
 		return new Div(a, b).optimize();
 	}
 
@@ -128,8 +124,8 @@ public class FloatValue {
 
 		@Override
 		public Value<Float> optimize() {
-			if (a.isConstant && a.get().floatValue() == 0) {
-				return Value.constant(0f);
+			if (a.isConstant() && a.get().floatValue() == 0) {
+				return new Constant<Float>(0f);
 			}
 			return super.optimize();
 		}
@@ -137,8 +133,7 @@ public class FloatValue {
 
 	// min
 
-	public static Value<Float> min(Value<? extends Number> a,
-			Value<? extends Number> b) {
+	public static Value<Float> min(Value<? extends Number> a, Value<? extends Number> b) {
 		return new Min(a, b).optimize();
 	}
 
@@ -162,8 +157,7 @@ public class FloatValue {
 
 	// max
 
-	public static Value<Float> max(Value<? extends Number> a,
-			Value<? extends Number> b) {
+	public static Value<Float> max(Value<? extends Number> a, Value<? extends Number> b) {
 		return new Max(a, b).optimize();
 	}
 
@@ -187,8 +181,7 @@ public class FloatValue {
 
 	// min-max
 
-	public static Value<Float> minMax(Value<? extends Number> min, Value<? extends Number> t,
-			Value<? extends Number> max) {
+	public static Value<Float> minMax(Value<? extends Number> min, Value<? extends Number> t, Value<? extends Number> max) {
 		return new MinMax(min, t, max).optimize();
 	}
 
@@ -222,12 +215,10 @@ public class FloatValue {
 			return tF;
 		}
 	}
-	
+
 	// linear
 
-	public static Value<Float> linear(Value<? extends Number> u0,
-			Value<? extends Number> u1, Value<? extends Number> v0,
-			Value<? extends Number> v1, Value<? extends Number> t) {
+	public static Value<Float> linear(Value<? extends Number> u0, Value<? extends Number> u1, Value<? extends Number> v0, Value<? extends Number> v1, Value<? extends Number> t) {
 		return new Linear(u0, u1, v0, v1, t).optimize();
 	}
 
@@ -239,9 +230,7 @@ public class FloatValue {
 		Value<? extends Number> v1;
 		Value<? extends Number> t;
 
-		public Linear(Value<? extends Number> u0, Value<? extends Number> u1,
-				Value<? extends Number> v0, Value<? extends Number> v1,
-				Value<? extends Number> t) {
+		public Linear(Value<? extends Number> u0, Value<? extends Number> u1, Value<? extends Number> v0, Value<? extends Number> v1, Value<? extends Number> t) {
 			this.u0 = u0;
 			this.u1 = u1;
 			this.v0 = v0;

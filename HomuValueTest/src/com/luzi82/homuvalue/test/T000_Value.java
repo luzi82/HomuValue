@@ -3,22 +3,23 @@ package com.luzi82.homuvalue.test;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.luzi82.homuvalue.Constant;
+import com.luzi82.homuvalue.LocalVariable;
 import com.luzi82.homuvalue.Slot;
 import com.luzi82.homuvalue.Value;
-import com.luzi82.homuvalue.LocalVariable;
 
 public class T000_Value {
 
 	@Test
 	public void simpleGet() {
-		Value<Integer> intValue = Value.constant(100);
+		Value<Integer> intValue = new Constant<Integer>(100);
 
 		Assert.assertEquals((Integer) 100, intValue.get());
 	}
 
 	@Test
 	public void variable() {
-		LocalVariable<Integer> intValue = Value.variable(100);
+		LocalVariable<Integer> intValue = new LocalVariable<Integer>(100);
 
 		Assert.assertEquals((Integer) 100, intValue.get());
 
@@ -29,10 +30,10 @@ public class T000_Value {
 
 	@Test
 	public void dirty() {
-		Value<Integer> intValue = Value.constant(100);
+		Value<Integer> intValue = new Constant(100);
 		Assert.assertFalse(intValue.dirty());
 
-		LocalVariable<Integer> intVar = Value.variable(100);
+		LocalVariable<Integer> intVar = new LocalVariable(100);
 		Assert.assertTrue(intVar.dirty());
 
 		intVar.get();
@@ -47,7 +48,7 @@ public class T000_Value {
 
 	@Test
 	public void dirtyListener() {
-		LocalVariable<Integer> intValue = Value.variable(100);
+		LocalVariable<Integer> intValue = new LocalVariable(100);
 
 		TestListener<Integer> intListener = new TestListener<Integer>();
 		intValue.addListener(intListener);
@@ -73,7 +74,7 @@ public class T000_Value {
 
 	@Test
 	public void sameNoDirty() {
-		LocalVariable<Integer> intVar = Value.variable(100);
+		LocalVariable<Integer> intVar = new LocalVariable(100);
 		Assert.assertTrue(intVar.dirty());
 
 		intVar.get();
@@ -85,20 +86,20 @@ public class T000_Value {
 
 	@Test
 	public void slot() {
-		Slot<Integer> slot = Value.slot(100);
+		Slot<Integer> slot = new Slot(100);
 		Assert.assertEquals((Integer) 100, slot.get());
 
-		slot.set(Value.constant(150));
+		slot.set(new Constant(150));
 		Assert.assertEquals((Integer) 150, slot.get());
 	}
 
 	@Test
 	public void slotDirty() {
-		Slot<Integer> slot = Value.slot(100);
+		Slot<Integer> slot = new Slot(100);
 		slot.get();
 		Assert.assertFalse(slot.dirty());
 
-		LocalVariable<Integer> intV0 = Value.variable(200);
+		LocalVariable<Integer> intV0 = new LocalVariable(200);
 		slot.set(intV0);
 		Assert.assertTrue(slot.dirty());
 
@@ -111,15 +112,15 @@ public class T000_Value {
 
 	@Test
 	public void slotUndirty() {
-		Slot<Integer> slot = Value.slot(100);
+		Slot<Integer> slot = new Slot(100);
 
-		LocalVariable<Integer> intV0 = Value.variable(200);
+		LocalVariable<Integer> intV0 = new LocalVariable(200);
 		slot.set(intV0);
 
 		slot.get();
 		Assert.assertFalse(slot.dirty());
 
-		LocalVariable<Integer> intV1 = Value.variable(300);
+		LocalVariable<Integer> intV1 = new LocalVariable(300);
 		slot.set(intV1);
 
 		slot.get();
@@ -131,9 +132,9 @@ public class T000_Value {
 
 	@Test
 	public void slotDefault() {
-		Slot<Integer> slot = Value.slot(100);
+		Slot<Integer> slot = new Slot(100);
 
-		LocalVariable<Integer> intV0 = Value.variable(200);
+		LocalVariable<Integer> intV0 = new LocalVariable(200);
 		slot.set(intV0);
 
 		Assert.assertTrue(slot.dirty());
@@ -152,7 +153,7 @@ public class T000_Value {
 
 	@Test
 	public void removeListener() {
-		LocalVariable<Integer> intValue = Value.variable(100);
+		LocalVariable<Integer> intValue = new LocalVariable(100);
 
 		intValue.get();
 

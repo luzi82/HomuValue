@@ -1,7 +1,7 @@
 package com.luzi82.homuvalue;
 
 
-public class Slot<T> extends Dynamic<T> implements Value.Listener<T> {
+public class Slot<T> extends AbstractDynamic<T> implements Value.Listener<T> {
 	private Value<T> v;
 	private T def;
 

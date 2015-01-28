@@ -1,10 +1,10 @@
 package com.luzi82.homuvalue;
 
 
-public class Constant<T> extends Value<T> {
+public class Constant<T> extends AbstractValue<T> {
 	private final T value;
 
-	Constant(T t) {
+	public Constant(T t) {
 		super(true);
 		value = t;
 	}

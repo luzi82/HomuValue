@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 
-public class RemoteMap<K, V extends Value, U> extends RemoteGroup<Map<K, U>> implements Map<K, V> {
+public class RemoteMap<K, V extends AbstractValue, U> extends RemoteGroup<Map<K, U>> implements Map<K, V> {
 
 	public HashMap<K, V> mValueMap;
 
@@ -115,11 +115,11 @@ public class RemoteMap<K, V extends Value, U> extends RemoteGroup<Map<K, U>> imp
 		return mValueMap.values();
 	}
 
-	public static interface Constractor<V extends Value, U> {
+	public static interface Constractor<V extends AbstractValue, U> {
 		public V create(U u);
 	}
 
-	public static interface MapListener<K, V extends Value, U> {
+	public static interface MapListener<K, V extends AbstractValue, U> {
 		public void onMapAdd(RemoteMap<K, V, U> map, K key, V value, U e);
 
 		public void onMapRemove(RemoteMap<K, V, U> map, K key, V value, U e);

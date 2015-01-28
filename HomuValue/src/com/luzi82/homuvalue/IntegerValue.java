@@ -1,6 +1,5 @@
 package com.luzi82.homuvalue;
 
-
 public class IntegerValue {
 
 	// sum
@@ -92,8 +91,8 @@ public class IntegerValue {
 		@Override
 		public Value<Integer> optimize() {
 			for (Value<Integer> v : values) {
-				if (v.isConstant && v.get() == 0) {
-					return Value.constant(0);
+				if (v.isConstant() && v.get() == 0) {
+					return new Constant<Integer>(0);
 				}
 			}
 			return super.optimize();
@@ -125,8 +124,8 @@ public class IntegerValue {
 
 		@Override
 		public Value<Integer> optimize() {
-			if (a.isConstant && a.get() == 0) {
-				return Value.constant(0);
+			if (a.isConstant() && a.get() == 0) {
+				return new Constant<Integer>(0);
 			}
 			return super.optimize();
 		}
@@ -182,8 +181,7 @@ public class IntegerValue {
 
 	// min-max
 
-	public static Value<Integer> minMax(Value<Integer> min, Value<Integer> t,
-			Value<Integer> max) {
+	public static Value<Integer> minMax(Value<Integer> min, Value<Integer> t, Value<Integer> max) {
 		return new MinMax(min, t, max).optimize();
 	}
 

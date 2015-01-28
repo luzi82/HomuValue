@@ -6,14 +6,14 @@ public abstract class Function<T> extends Group<T> {
 	@SuppressWarnings({ "rawtypes" })
 	protected void addChild(Value v) {
 		super.addChild(v);
-		if (isConst && !v.isConstant) {
+		if (isConst && !v.isConstant()) {
 			isConst = false;
 		}
 	}
 
 	public Value<T> optimize() {
 		if (isConst) {
-			return Value.constant(get());
+			return new Constant<T>(get());
 		} else {
 			return this;
 		}
