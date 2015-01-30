@@ -42,39 +42,31 @@ public class VariableMapVariable<K, I extends AbstractVariable<O>, O> extends Ab
 			throw new Error(e);
 		}
 		ret.set(o);
-		ret.addListener(mListener);
 		return ret;
 	}
 
 	@Override
-	public void clear() {
-		for (I i : values()) {
+	protected void innerClear() {
+		Map<K, I> tmp = (Map<K, I>) mMap.clone();
+		super.innerClear();
+		for (I i : tmp.values()) {
 			i.removeListener(mListener);
 		}
-		super.clear();
 	}
 
 	@Override
-	public I put(K key, I value) {
+	protected void innerPut(K key, I value) {
 		value.addListener(mListener);
-		return super.put(key, value);
+		super.innerPut(key, value);
 	}
 
 	@Override
-	public void putAll(Map<? extends K, ? extends I> m) {
-		for (I i : m.values()) {
-			i.addListener(mListener);
+	protected I innerRemove(Object key) {
+		I ret = super.innerRemove(key);
+		if (ret != null) {
+			ret.removeListener(mListener);
 		}
-		super.putAll(m);
-	}
-
-	@Override
-	public I remove(Object key) {
-		I ret = super.remove(key);
-		ret.removeListener(mListener);
 		return ret;
 	}
-
-	//
 
 }

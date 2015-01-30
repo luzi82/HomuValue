@@ -1,17 +1,21 @@
 package com.luzi82.homuvalue.obj;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 
 import com.luzi82.homuvalue.Dirty;
 
-public abstract class AbstractListVariable<I, O> extends LinkedList<I> implements ListVariable<I, O> {
+public abstract class AbstractListVariable<I, O> implements ListVariable<I, O> {
 
 	protected final Dirty<List<O>> mDirty;
+	protected final LinkedList<I> mList;
 
 	public AbstractListVariable() {
 		mDirty = new Dirty<List<O>>(this);
+		mList = new LinkedList<I>();
 	}
 
 	@Override
@@ -37,7 +41,7 @@ public abstract class AbstractListVariable<I, O> extends LinkedList<I> implement
 	@Override
 	public List<O> get() {
 		LinkedList<O> ret = new LinkedList<O>();
-		for (I i : this) {
+		for (I i : mList) {
 			ret.add(toO(i));
 		}
 		mDirty.set(false);
@@ -48,9 +52,9 @@ public abstract class AbstractListVariable<I, O> extends LinkedList<I> implement
 
 	@Override
 	public void set(List<O> t) {
-		super.clear();
+		mList.clear();
 		for (O o : t) {
-			super.add(toI(o));
+			mList.add(toI(o));
 		}
 		mDirty.set(true);
 	}
@@ -60,168 +64,246 @@ public abstract class AbstractListVariable<I, O> extends LinkedList<I> implement
 	//
 
 	@Override
+	public void addChangeListener(ChangeListener<I> aListener) {
+		mChangeListenerManager.addChangeListener(aListener);
+	}
+
+	@Override
+	public void removeChangeListener(ChangeListener<I> aListener) {
+		mChangeListenerManager.removeChangeListener(aListener);
+	}
+
+	public static class ChangeListenerManager<I> {
+
+		protected final LinkedList<ChangeListener<I>> mListenerList = new LinkedList<ChangeListener<I>>();
+
+		public void addChangeListener(ChangeListener<I> aListener) {
+			mListenerList.add(aListener);
+		}
+
+		public void removeChangeListener(ChangeListener<I> aListener) {
+			mListenerList.remove(aListener);
+		}
+
+		public void onAdd(I aI) {
+			for (ChangeListener<I> c : mListenerList) {
+				c.onAdd(aI);
+			}
+		}
+
+		public void onRemove(I aI) {
+			for (ChangeListener<I> c : mListenerList) {
+				c.onRemove(aI);
+			}
+		}
+
+	}
+
+	protected ChangeListenerManager<I> mChangeListenerManager = new ChangeListenerManager<I>();
+
+	//
+
+	@Override
 	public boolean add(I e) {
-		boolean ret = super.add(e);
-		if (ret)
-			mDirty.set(true);
-		return ret;
+		beforeAdd(e);
+		mList.add(e);
+		afterAdd(e);
+		mDirty.set(true);
+		return true;
 	}
 
 	@Override
 	public void add(int index, I element) {
-		super.add(index, element);
+		beforeAdd(element);
+		mList.add(index, element);
+		afterAdd(element);
 		mDirty.set(true);
 	}
 
 	@Override
 	public boolean addAll(Collection<? extends I> c) {
-		boolean ret = super.addAll(c);
-		if (ret)
-			mDirty.set(true);
-		return ret;
+		for (I i : c) {
+			beforeAdd(i);
+		}
+		mList.addAll(c);
+		for (I i : c) {
+			afterAdd(i);
+		}
+		mDirty.set(true);
+		return true;
 	}
 
 	@Override
 	public boolean addAll(int index, Collection<? extends I> c) {
-		boolean ret = super.addAll(index, c);
-		if (ret)
-			mDirty.set(true);
-		return ret;
-	}
-
-	@Override
-	public void addFirst(I e) {
-		super.addFirst(e);
+		for (I i : c) {
+			beforeAdd(i);
+		}
+		mList.addAll(index, c);
+		for (I i : c) {
+			afterAdd(i);
+		}
 		mDirty.set(true);
-	}
-
-	@Override
-	public void addLast(I e) {
-		super.addLast(e);
-		mDirty.set(true);
+		return true;
 	}
 
 	@Override
 	public void clear() {
-		super.clear();
+		List<I> tmp = (List<I>) mList.clone();
+		clear();
+		for (I i : tmp) {
+			afterRemove(i);
+		}
 		mDirty.set(true);
 	}
 
 	@Override
-	public boolean offer(I e) {
-		boolean ret = super.offer(e);
-		if (ret)
-			mDirty.set(true);
-		return ret;
+	public boolean contains(Object o) {
+		return mList.contains(o);
 	}
 
 	@Override
-	public boolean offerFirst(I e) {
-		boolean ret = super.offerFirst(e);
-		if (ret)
-			mDirty.set(true);
-		return ret;
+	public boolean containsAll(Collection<?> c) {
+		return mList.containsAll(c);
 	}
 
 	@Override
-	public boolean offerLast(I e) {
-		boolean ret = super.offerLast(e);
-		if (ret)
-			mDirty.set(true);
-		return ret;
+	public I get(int index) {
+		return mList.get(index);
 	}
 
 	@Override
-	public I poll() {
-		I ret = super.poll();
-		mDirty.set(true);
-		return ret;
+	public int indexOf(Object o) {
+		return mList.indexOf(o);
 	}
 
 	@Override
-	public I pollFirst() {
-		I ret = super.pollFirst();
-		mDirty.set(true);
-		return ret;
+	public boolean isEmpty() {
+		return mList.isEmpty();
 	}
 
 	@Override
-	public I pollLast() {
-		I ret = super.pollLast();
-		mDirty.set(true);
-		return ret;
+	public Iterator<I> iterator() {
+		// TODO, handle Iterator.remove
+		return mList.iterator();
 	}
 
 	@Override
-	public I pop() {
-		I ret = super.pop();
-		mDirty.set(true);
-		return ret;
+	public int lastIndexOf(Object o) {
+		return mList.lastIndexOf(o);
 	}
 
 	@Override
-	public void push(I e) {
-		super.push(e);
-		mDirty.set(true);
+	public ListIterator<I> listIterator() {
+		// TODO, handle function
+		return mList.listIterator();
 	}
 
 	@Override
-	public I remove() {
-		I ret = super.remove();
-		mDirty.set(true);
-		return ret;
+	public ListIterator<I> listIterator(int index) {
+		// TODO, handle function
+		return mList.listIterator(index);
 	}
 
 	@Override
 	public I remove(int index) {
-		I ret = super.remove(index);
+		I ret = mList.get(index);
+		afterRemove(ret);
 		mDirty.set(true);
 		return ret;
 	}
 
 	@Override
 	public boolean remove(Object o) {
-		boolean ret = super.remove(o);
-		if (ret)
+		boolean ret = mList.remove(o);
+		if (ret) {
+			afterRemove((I) o);
 			mDirty.set(true);
+		}
 		return ret;
 	}
 
 	@Override
-	public I removeFirst() {
-		I ret = super.removeFirst();
+	public boolean removeAll(Collection<?> c) {
+		boolean ret = false;
+		for (Object o : c) {
+			if (mList.remove(o)) {
+				afterRemove((I) o);
+				ret = true;
+			}
+		}
 		mDirty.set(true);
-		return ret;
-	}
-
-	@Override
-	public boolean removeFirstOccurrence(Object o) {
-		boolean ret = super.removeFirstOccurrence(o);
-		if (ret)
+		if (ret) {
 			mDirty.set(true);
+		}
 		return ret;
 	}
 
 	@Override
-	public I removeLast() {
-		I ret = super.removeLast();
-		mDirty.set(true);
-		return ret;
-	}
-
-	@Override
-	public boolean removeLastOccurrence(Object o) {
-		boolean ret = super.removeLastOccurrence(o);
-		if (ret)
+	public boolean retainAll(Collection<?> c) {
+		LinkedList<I> tmp = new LinkedList<I>();
+		for (I i : mList) {
+			if (!c.contains(i)) {
+				tmp.add(i);
+			}
+		}
+		for (I i : tmp) {
+			mList.remove(i);
+			afterRemove(i);
+		}
+		boolean ret = !tmp.isEmpty();
+		if (ret) {
 			mDirty.set(true);
+		}
 		return ret;
 	}
 
 	@Override
 	public I set(int index, I element) {
-		I ret = super.set(index, element);
+		beforeAdd(element);
+		I ret = mList.set(index, element);
+		if (ret != null) {
+			afterRemove(ret);
+		}
+		afterAdd(element);
 		mDirty.set(true);
 		return ret;
+	}
+
+	@Override
+	public int size() {
+		return mList.size();
+	}
+
+	@Override
+	public List<I> subList(int fromIndex, int toIndex) {
+		return mList.subList(fromIndex, toIndex);
+	}
+
+	@Override
+	public Object[] toArray() {
+		return mList.toArray();
+	}
+
+	@Override
+	public <T> T[] toArray(T[] a) {
+		return mList.toArray(a);
+	}
+
+	//
+
+	protected void beforeAdd(I e) {
+
+	}
+
+	protected void afterAdd(I e) {
+		mChangeListenerManager.onAdd(e);
+	}
+
+	// protected void beforeRemove(I e) {
+	// }
+
+	protected void afterRemove(I e) {
+		mChangeListenerManager.onRemove(e);
 	}
 
 }

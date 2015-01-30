@@ -1,5 +1,6 @@
 package com.luzi82.homuvalue.obj;
 
+
 public class ObjectMapVariable<S, O> extends AbstractMapVariable<S, O, O> {
 
 	@Override
@@ -11,5 +12,5 @@ public class ObjectMapVariable<S, O> extends AbstractMapVariable<S, O, O> {
 	protected O toI(O o) {
 		return o;
 	}
-
+	
 }

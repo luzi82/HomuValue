@@ -1,5 +1,6 @@
 package com.luzi82.homuvalue.obj;
 
+
 public class ObjectListVariable<O> extends AbstractListVariable<O, O> {
 
 	@Override
