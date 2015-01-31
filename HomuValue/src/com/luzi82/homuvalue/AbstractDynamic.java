@@ -1,6 +1,5 @@
 package com.luzi82.homuvalue;
 
-
 public abstract class AbstractDynamic<T> extends AbstractValue<T> implements Dynamic<T> {
 
 	private final Dirty<T> mDirty;
@@ -28,12 +27,12 @@ public abstract class AbstractDynamic<T> extends AbstractValue<T> implements Dyn
 
 	@Override
 	public final void addListener(Value.Listener<T> listener) {
-		mDirty.addListener(listener);
+		mDirty.add(listener);
 	}
 
 	@Override
 	public final void removeListener(AbstractValue.Listener<T> listener) {
-		mDirty.removeListener(listener);
+		mDirty.remove(listener);
 	}
 
 	@Override

@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
+import com.luzi82.common.WeakList;
 import com.luzi82.homuvalue.Dirty;
 
 public abstract class AbstractListVariable<I, O> implements ListVariable<I, O> {
@@ -20,12 +21,12 @@ public abstract class AbstractListVariable<I, O> implements ListVariable<I, O> {
 
 	@Override
 	public void addListener(Listener<List<O>> listener) {
-		mDirty.addListener(listener);
+		mDirty.add(listener);
 	}
 
 	@Override
 	public void removeListener(Listener<List<O>> listener) {
-		mDirty.removeListener(listener);
+		mDirty.remove(listener);
 	}
 
 	@Override
@@ -65,34 +66,26 @@ public abstract class AbstractListVariable<I, O> implements ListVariable<I, O> {
 
 	@Override
 	public void addChangeListener(ChangeListener<I> aListener) {
-		mChangeListenerManager.addChangeListener(aListener);
+		mChangeListenerManager.add(aListener);
 	}
 
 	@Override
 	public void removeChangeListener(ChangeListener<I> aListener) {
-		mChangeListenerManager.removeChangeListener(aListener);
+		mChangeListenerManager.remove(aListener);
 	}
 
-	public static class ChangeListenerManager<I> {
-
-		protected final LinkedList<ChangeListener<I>> mListenerList = new LinkedList<ChangeListener<I>>();
-
-		public void addChangeListener(ChangeListener<I> aListener) {
-			mListenerList.add(aListener);
-		}
-
-		public void removeChangeListener(ChangeListener<I> aListener) {
-			mListenerList.remove(aListener);
-		}
+	public static class ChangeListenerManager<I> extends WeakList<ChangeListener<I>> {
 
 		public void onAdd(I aI) {
-			for (ChangeListener<I> c : mListenerList) {
+			clearNull();
+			for (ChangeListener<I> c : this) {
 				c.onAdd(aI);
 			}
 		}
 
 		public void onRemove(I aI) {
-			for (ChangeListener<I> c : mListenerList) {
+			clearNull();
+			for (ChangeListener<I> c : this) {
 				c.onRemove(aI);
 			}
 		}

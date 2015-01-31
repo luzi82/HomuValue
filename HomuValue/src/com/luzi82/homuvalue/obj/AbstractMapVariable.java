@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 
+import com.luzi82.common.WeakList;
 import com.luzi82.homuvalue.Dirty;
 
 public abstract class AbstractMapVariable<K, I, O> implements MapVariable<K, I, O> {
@@ -20,12 +21,12 @@ public abstract class AbstractMapVariable<K, I, O> implements MapVariable<K, I, 
 
 	@Override
 	public void addListener(Listener<Map<K, O>> listener) {
-		mDirty.addListener(listener);
+		mDirty.add(listener);
 	}
 
 	@Override
 	public void removeListener(Listener<Map<K, O>> listener) {
-		mDirty.removeListener(listener);
+		mDirty.remove(listener);
 	}
 
 	@Override
@@ -66,34 +67,26 @@ public abstract class AbstractMapVariable<K, I, O> implements MapVariable<K, I, 
 
 	@Override
 	public void addChangeListener(ChangeListener<K, I> aListener) {
-		mChangeListenerManager.addChangeListener(aListener);
+		mChangeListenerManager.add(aListener);
 	}
 
 	@Override
 	public void removeChangeListener(ChangeListener<K, I> aListener) {
-		mChangeListenerManager.removeChangeListener(aListener);
+		mChangeListenerManager.remove(aListener);
 	}
 
-	public static class ChangeListenerManager<K, I> {
-
-		protected final LinkedList<ChangeListener<K, I>> mListenerList = new LinkedList<ChangeListener<K, I>>();
-
-		public void addChangeListener(ChangeListener<K, I> aListener) {
-			mListenerList.add(aListener);
-		}
-
-		public void removeChangeListener(ChangeListener<K, I> aListener) {
-			mListenerList.remove(aListener);
-		}
+	public static class ChangeListenerManager<K, I> extends WeakList<ChangeListener<K, I>> {
 
 		public void onAdd(K aK, I aI) {
-			for (ChangeListener<K, I> c : mListenerList) {
+			clearNull();
+			for (ChangeListener<K, I> c : this) {
 				c.onAdd(aK, aI);
 			}
 		}
 
 		public void onRemove(K aK, I aI) {
-			for (ChangeListener<K, I> c : mListenerList) {
+			clearNull();
+			for (ChangeListener<K, I> c : this) {
 				c.onRemove(aK, aI);
 			}
 		}
