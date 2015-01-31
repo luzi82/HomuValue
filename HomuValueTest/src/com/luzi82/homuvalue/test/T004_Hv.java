@@ -7,6 +7,7 @@ import java.util.Map;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.luzi82.common.Factory;
 import com.luzi82.homuvalue.obj.ObjectListVariable;
 import com.luzi82.homuvalue.obj.ObjectMapVariable;
 import com.luzi82.homuvalue.obj.ObjectVariable;
@@ -49,15 +50,8 @@ public class T004_Hv {
 	@Test
 	public void t1() {
 
-		final Constructor[] constructor = new Constructor[1];
-		try {
-			constructor[0] = O.class.getConstructor();
-		} catch (Exception e) {
-			throw new Error(e);
-		}
-
 		class OO extends ObjectVariable {
-			public ObjectVariable.VarField<O, Map<String, Object>> j = new ObjectVariable.VarField<O, Map<String, Object>>("j", constructor[0]);
+			public ObjectVariable.VarField<O, Map<String, Object>> j = new ObjectVariable.VarField<O, Map<String, Object>>("j", Factory.C.create(O.class));
 
 			public OO() {
 				addField(j);
@@ -92,7 +86,7 @@ public class T004_Hv {
 	}
 
 	@Test
-	public void t2() {
+	public void t20() {
 		ObjectListVariable<Integer> i = new ObjectListVariable<Integer>();
 
 		List<Integer> l = i.get();
@@ -108,6 +102,25 @@ public class T004_Hv {
 		l = i.get();
 		Assert.assertEquals(1, l.size());
 		Assert.assertEquals(42, (int) l.get(0));
+	}
+
+	@Test
+	public void t21() {
+		ObjectListVariable<String> i = new ObjectListVariable<String>();
+
+		List<String> l = i.get();
+		Assert.assertEquals(0, l.size());
+
+		TestListener tl = new TestListener();
+		i.addListener(tl);
+
+		i.add("asdf");
+
+		Assert.assertEquals(i, tl.v);
+
+		l = i.get();
+		Assert.assertEquals(1, l.size());
+		Assert.assertEquals("asdf", l.get(0));
 	}
 
 	@Test
@@ -158,14 +171,7 @@ public class T004_Hv {
 
 	@Test
 	public void t5() {
-		final Constructor[] constructor = new Constructor[1];
-		try {
-			constructor[0] = O.class.getConstructor();
-		} catch (Exception e) {
-			throw new Error(e);
-		}
-
-		VariableMapVariable<String, O, Map<String, Object>> i = new VariableMapVariable<String, O, Map<String, Object>>(constructor[0]);
+		VariableMapVariable<String, O, Map<String, Object>> i = new VariableMapVariable<String, O, Map<String, Object>>(Factory.C.create(O.class));
 
 		Map<String, Map<String, Object>> l = i.get();
 		Assert.assertEquals(0, l.size());

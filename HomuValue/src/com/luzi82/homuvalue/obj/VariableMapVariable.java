@@ -1,17 +1,16 @@
 package com.luzi82.homuvalue.obj;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
-import com.luzi82.homuvalue.AbstractVariable;
+import com.luzi82.common.Factory;
 import com.luzi82.homuvalue.Value;
+import com.luzi82.homuvalue.Variable;
 
-public class VariableMapVariable<K, I extends AbstractVariable<O>, O> extends AbstractMapVariable<K, I, O> {
+public class VariableMapVariable<K, I extends Variable<O>, O> extends AbstractMapVariable<K, I, O> {
 
-	private final Constructor<I> mConstructor;
+	private final Factory<I> mConstructor;
 
-	public VariableMapVariable(Constructor<I> c) {
+	public VariableMapVariable(Factory<I> c) {
 		this.mConstructor = c;
 	}
 
@@ -29,18 +28,7 @@ public class VariableMapVariable<K, I extends AbstractVariable<O>, O> extends Ab
 
 	@Override
 	protected I toI(O o) {
-		I ret = null;
-		try {
-			ret = mConstructor.newInstance();
-		} catch (InstantiationException e) {
-			throw new Error(e);
-		} catch (IllegalAccessException e) {
-			throw new Error(e);
-		} catch (IllegalArgumentException e) {
-			throw new Error(e);
-		} catch (InvocationTargetException e) {
-			throw new Error(e);
-		}
+		I ret = mConstructor.create();
 		ret.set(o);
 		return ret;
 	}
@@ -67,6 +55,25 @@ public class VariableMapVariable<K, I extends AbstractVariable<O>, O> extends Ab
 			ret.removeListener(mListener);
 		}
 		return ret;
+	}
+
+	public static <K, I extends Variable<O>, O> Factory<VariableMapVariable<K, I, O>> createFactory(Class<K> aKClass, Factory<I> iF) {
+		return new F<K, I, O>(iF);
+	}
+
+	public static class F<K, I extends Variable<O>, O> implements Factory<VariableMapVariable<K, I, O>> {
+
+		protected final Factory<I> iF;
+
+		public F(Factory<I> aF) {
+			iF = aF;
+		}
+
+		@Override
+		public VariableMapVariable<K, I, O> create() {
+			return new VariableMapVariable<K, I, O>(iF);
+		}
+
 	}
 
 }

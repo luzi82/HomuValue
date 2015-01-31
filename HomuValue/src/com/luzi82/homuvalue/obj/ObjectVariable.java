@@ -1,11 +1,12 @@
 package com.luzi82.homuvalue.obj;
 
-import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.luzi82.common.Factory;
 import com.luzi82.homuvalue.AbstractVariable;
 import com.luzi82.homuvalue.Value;
+import com.luzi82.homuvalue.Variable;
 
 public class ObjectVariable extends AbstractVariable<Map<String, Object>> {
 
@@ -21,7 +22,9 @@ public class ObjectVariable extends AbstractVariable<Map<String, Object>> {
 	private Listener mListener = new Listener() {
 		@Override
 		public void onValueDirty(Value v) {
+//			System.out.println("ObjectVariable onValueDirty start dirty: " + dirty());
 			ObjectVariable.this.markDirty();
+//			System.out.println("ObjectVariable onValueDirty end dirty: " + dirty());
 		}
 	};
 
@@ -36,8 +39,10 @@ public class ObjectVariable extends AbstractVariable<Map<String, Object>> {
 
 	@Override
 	protected Map<String, Object> variableGet() {
+//		System.out.println("ObjectVariable variableGet");
 		HashMap<String, Object> ret = new HashMap<String, Object>();
 		for (Field f : mFieldMap.values()) {
+//			System.out.println(f.getName());
 			ret.put(f.getName(), f.output());
 		}
 		return ret;
@@ -91,22 +96,14 @@ public class ObjectVariable extends AbstractVariable<Map<String, Object>> {
 
 	}
 
-	public static class VarField<I extends AbstractVariable<O>, O> extends Field<I, O> {
+	public static class VarField<I extends Variable<O>, O> extends Field<I, O> {
 
-		private final Constructor<I> mConstructor;
+		private final Factory<I> mConstructor;
 
-		public VarField(String aName, Constructor<I> aConstructor) {
+		public VarField(String aName, Factory<I> aFactory) {
 			super(aName);
-			mConstructor = aConstructor;
-		}
-
-		public VarField(String aName, Class<I> aClass) {
-			super(aName);
-			try {
-				mConstructor = aClass.getConstructor();
-			} catch (NoSuchMethodException e) {
-				throw new Error(e);
-			}
+			// System.out.println("asdf");
+			mConstructor = aFactory;
 		}
 
 		@Override
@@ -115,7 +112,7 @@ public class ObjectVariable extends AbstractVariable<Map<String, Object>> {
 				mObj.removeListener(mListener);
 			}
 			try {
-				mObj = mConstructor.newInstance();
+				mObj = mConstructor.create();
 			} catch (Exception e) {
 				throw new Error(e);
 			}
@@ -126,16 +123,19 @@ public class ObjectVariable extends AbstractVariable<Map<String, Object>> {
 
 		@Override
 		public O output() {
+//			System.out.println("field " + getName() + " output start");
 			I i = get();
 			if (i == null) {
 				return null;
 			}
+//			System.out.println("field " + getName() + " output 0");
 			return i.get();
 		}
 
 		private Listener<O> mListener = new Listener<O>() {
 			@Override
 			public void onValueDirty(Value<O> v) {
+//				System.out.println("field " + VarField.this.getName() + " dirty");
 				VarField.this.markDirty();
 			}
 		};

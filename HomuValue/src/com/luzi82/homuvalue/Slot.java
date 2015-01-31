@@ -1,6 +1,5 @@
 package com.luzi82.homuvalue;
 
-
 public class Slot<T> extends AbstractDynamic<T> implements Value.Listener<T> {
 	private Value<T> v;
 	private T def;
@@ -18,21 +17,23 @@ public class Slot<T> extends AbstractDynamic<T> implements Value.Listener<T> {
 		}
 		if (v == null) {
 			if (get() != def) {
+				changeV(v);
 				markDirty();
+			} else {
+				changeV(v);
 			}
-			changeV(v);
 			return;
 		}
 		if (v.dirty()) {
-			markDirty();
 			changeV(v);
+			markDirty();
 			return;
 		}
 		T oldV = get();
 		T newV = v.get();
 		if (oldV != newV) {
-			markDirty();
 			changeV(v);
+			markDirty();
 			return;
 		}
 		changeV(v);
