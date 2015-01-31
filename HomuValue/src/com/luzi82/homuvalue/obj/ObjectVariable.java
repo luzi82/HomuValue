@@ -100,6 +100,15 @@ public class ObjectVariable extends AbstractVariable<Map<String, Object>> {
 			mConstructor = aConstructor;
 		}
 
+		public VarField(String aName, Class<I> aClass) {
+			super(aName);
+			try {
+				mConstructor = aClass.getConstructor();
+			} catch (NoSuchMethodException e) {
+				throw new Error(e);
+			}
+		}
+
 		@Override
 		public void input(O o) {
 			if (mObj != null) {
