@@ -14,6 +14,9 @@ public class ObjectVariable extends AbstractVariable<Map<String, Object>> {
 
 	@SuppressWarnings("unchecked")
 	protected void addField(Field aField) {
+		if (mFieldMap.containsKey(aField.getName())) {
+			throw new IllegalArgumentException();
+		}
 		mFieldMap.put(aField.getName(), aField);
 		aField.addListener(mListener);
 	}
@@ -22,9 +25,11 @@ public class ObjectVariable extends AbstractVariable<Map<String, Object>> {
 	private Listener mListener = new Listener() {
 		@Override
 		public void onValueDirty(Value v) {
-//			System.out.println("ObjectVariable onValueDirty start dirty: " + dirty());
+			// System.out.println("ObjectVariable onValueDirty start dirty: " +
+			// dirty());
 			ObjectVariable.this.markDirty();
-//			System.out.println("ObjectVariable onValueDirty end dirty: " + dirty());
+			// System.out.println("ObjectVariable onValueDirty end dirty: " +
+			// dirty());
 		}
 	};
 
@@ -39,10 +44,10 @@ public class ObjectVariable extends AbstractVariable<Map<String, Object>> {
 
 	@Override
 	protected Map<String, Object> variableGet() {
-//		System.out.println("ObjectVariable variableGet");
+		// System.out.println("ObjectVariable variableGet");
 		HashMap<String, Object> ret = new HashMap<String, Object>();
 		for (Field f : mFieldMap.values()) {
-//			System.out.println(f.getName());
+			// System.out.println(f.getName());
 			ret.put(f.getName(), f.output());
 		}
 		return ret;
@@ -123,19 +128,20 @@ public class ObjectVariable extends AbstractVariable<Map<String, Object>> {
 
 		@Override
 		public O output() {
-//			System.out.println("field " + getName() + " output start");
+			// System.out.println("field " + getName() + " output start");
 			I i = get();
 			if (i == null) {
 				return null;
 			}
-//			System.out.println("field " + getName() + " output 0");
+			// System.out.println("field " + getName() + " output 0");
 			return i.get();
 		}
 
 		private Listener<O> mListener = new Listener<O>() {
 			@Override
 			public void onValueDirty(Value<O> v) {
-//				System.out.println("field " + VarField.this.getName() + " dirty");
+				// System.out.println("field " + VarField.this.getName() +
+				// " dirty");
 				VarField.this.markDirty();
 			}
 		};
