@@ -107,8 +107,11 @@ public class ObjectVariable extends AbstractVariable<Map<String, Object>> {
 
 		public VarField(String aName, Factory<I> aFactory) {
 			super(aName);
-			// System.out.println("asdf");
 			mConstructor = aFactory;
+		}
+
+		public VarField(String aName, Class<I> aClass) {
+			this(aName, new Factory.C<I>(aClass));
 		}
 
 		@Override

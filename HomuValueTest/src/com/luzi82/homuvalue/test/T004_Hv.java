@@ -1,6 +1,7 @@
 package com.luzi82.homuvalue.test;
 
 import java.lang.reflect.Constructor;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -8,6 +9,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.luzi82.common.Factory;
+import com.luzi82.homuvalue.obj.ListVariable;
+import com.luzi82.homuvalue.obj.MapVariable;
 import com.luzi82.homuvalue.obj.ObjectListVariable;
 import com.luzi82.homuvalue.obj.ObjectMapVariable;
 import com.luzi82.homuvalue.obj.ObjectVariable;
@@ -125,14 +128,7 @@ public class T004_Hv {
 
 	@Test
 	public void t3() {
-		final Constructor[] constructor = new Constructor[1];
-		try {
-			constructor[0] = O.class.getConstructor();
-		} catch (Exception e) {
-			throw new Error(e);
-		}
-
-		VariableListVariable<O, Map<String, Object>> i = new VariableListVariable<O, Map<String, Object>>(constructor[0]);
+		VariableListVariable<O, Map<String, Object>> i = new VariableListVariable<O, Map<String, Object>>(Factory.C.create(O.class));
 
 		List<Map<String, Object>> l = i.get();
 		Assert.assertEquals(0, l.size());
@@ -188,6 +184,72 @@ public class T004_Hv {
 		l = i.get();
 		Assert.assertEquals(1, l.size());
 		Assert.assertEquals(42, l.get("a").get("i"));
+	}
+
+	@Test
+	public void t6() {
+		ObjectListVariable<Integer> i = new ObjectListVariable<Integer>();
+		i.get();
+
+		final LinkedList<Integer> rList = new LinkedList<Integer>();
+		final LinkedList<Integer> aList = new LinkedList<Integer>();
+
+		ListVariable.ChangeListener<Integer> iList = new ListVariable.ChangeListener<Integer>() {
+			@Override
+			public void onRemove(Integer aI) {
+				rList.add(aI);
+			}
+
+			@Override
+			public void onAdd(Integer aI) {
+				aList.add(aI);
+			}
+		};
+
+		i.addChangeListener(iList);
+
+		i.add(42);
+
+		Assert.assertEquals(1, aList.size());
+		Assert.assertEquals((Integer) 42, (Integer) aList.get(0));
+	}
+
+	@Test
+	public void t7() {
+		ObjectMapVariable<Integer, String> i = new ObjectMapVariable<Integer, String>();
+		i.get();
+
+		final LinkedList<Integer> rList = new LinkedList<Integer>();
+		final LinkedList<Integer> aList = new LinkedList<Integer>();
+
+		MapVariable.ChangeListener<Integer, String> iList = new MapVariable.ChangeListener<Integer, String>() {
+			@Override
+			public void onAdd(Integer aK, String aI) {
+				aList.add(aK);
+			}
+
+			@Override
+			public void onRemove(Integer aK, String aI) {
+				rList.add(aK);
+			}
+		};
+
+		i.addChangeListener(iList);
+
+		i.put(42, "a");
+
+		Assert.assertEquals(1, aList.size());
+		Assert.assertEquals((Integer) 42, (Integer) aList.get(0));
+		Assert.assertEquals(0, rList.size());
+
+		aList.clear();
+		rList.clear();
+
+		i.remove(42);
+
+		Assert.assertEquals(1, rList.size());
+		Assert.assertEquals((Integer) 42, (Integer) rList.get(0));
+		Assert.assertEquals(0, aList.size());
 	}
 
 }

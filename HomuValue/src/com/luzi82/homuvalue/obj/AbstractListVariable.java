@@ -53,9 +53,16 @@ public abstract class AbstractListVariable<I, O> implements ListVariable<I, O> {
 
 	@Override
 	public void set(List<O> t) {
+		LinkedList<I> tmp = new LinkedList<I>(mList);
 		mList.clear();
+		for (I i : tmp) {
+			afterRemove(i);
+		}
 		for (O o : t) {
-			mList.add(toI(o));
+			I i = toI(o);
+			beforeAdd(i);
+			mList.add(i);
+			afterAdd(i);
 		}
 		mDirty.set(true);
 	}

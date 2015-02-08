@@ -4,14 +4,16 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 
+import com.luzi82.common.Factory;
 import com.luzi82.homuvalue.AbstractVariable;
 import com.luzi82.homuvalue.Value;
+import com.luzi82.homuvalue.Variable;
 
-public class VariableListVariable<I extends AbstractVariable<O>, O> extends AbstractListVariable<I, O> {
+public class VariableListVariable<I extends Variable<O>, O> extends AbstractListVariable<I, O> {
 
-	private final Constructor<I> mConstructor;
+	private final Factory<I> mConstructor;
 
-	public VariableListVariable(Constructor<I> c) {
+	public VariableListVariable(Factory<I> c) {
 		this.mConstructor = c;
 	}
 
@@ -29,20 +31,8 @@ public class VariableListVariable<I extends AbstractVariable<O>, O> extends Abst
 
 	@Override
 	protected I toI(O o) {
-		I ret = null;
-		try {
-			ret = mConstructor.newInstance();
-		} catch (InstantiationException e) {
-			throw new Error(e);
-		} catch (IllegalAccessException e) {
-			throw new Error(e);
-		} catch (IllegalArgumentException e) {
-			throw new Error(e);
-		} catch (InvocationTargetException e) {
-			throw new Error(e);
-		}
+		I ret = mConstructor.create();
 		ret.set(o);
-		ret.addListener(mListener);
 		return ret;
 	}
 
@@ -54,6 +44,21 @@ public class VariableListVariable<I extends AbstractVariable<O>, O> extends Abst
 	protected void afterRemove(I e) {
 		super.afterRemove(e);
 		e.removeListener(mListener);
+	}
+
+	public static class F<I extends Variable<O>, O> implements Factory<VariableListVariable<I, O>> {
+
+		protected final Factory<I> iF;
+
+		public F(Factory<I> aF) {
+			iF = aF;
+		}
+
+		@Override
+		public VariableListVariable<I, O> create() {
+			return new VariableListVariable<I, O>(iF);
+		}
+
 	}
 
 }
